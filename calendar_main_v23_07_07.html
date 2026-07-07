@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>캘린더 메인 v18</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+#mainScroll::-webkit-scrollbar { display:none; }
+
+:root {
+  --bg:      #121212;
+  --surface: #1A1A1A;
+  --card:    #1E1E1E;
+  --border:  #2E2E2E;
+  --coral:   #E8927C;
+  --txt1:    #E8E8E8;
+  --txt2:    #CCCCCC;
+  --txt3:    #888888;
+  --sun:     #D47A7A;
+  --sat:     #7A9CD4;
+}
+body.ivory {
+  --bg:      #F5F0E8;
+  --surface: #EDE8DC;
+  --card:    #EDE8DC;
+  --border:  #D4C9B0;
+  --txt1:    #222222;
+  --txt2:    #333333;
+  --txt3:    #888888;
+}
+body {
+  background: #0a0a0a;
+  display: flex; justify-content: center;
+  min-height: 100vh; padding: 24px 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.phone {
+  width: 360px; height: 780px;
+  background: var(--bg);
+  border-radius: 36px; border: 1.5px solid var(--border);
+  overflow: hidden; box-shadow: 0 28px 80px rgba(0,0,0,0.8);
+  display: flex; flex-direction: column;
+}
+.statusbar {
+  background: var(--surface); padding: 7px 16px 3px;
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--txt3); flex-shrink: 0;
+}
+.appbar {
+  background: var(--surface); padding: 8px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.app-title { color: var(--txt1); font-size: 16px; font-weight: 700; }
+.month-nav { display: flex; align-items: center; gap: 8px; }
+.month-nav button { background: none; border: none; color: var(--coral); font-size: 15px; cursor: pointer; font-weight: 700; padding: 0 4px; }
+.month-nav span { color: var(--txt1); font-size: 13px; font-weight: 600; }
+.dow-row {
+  display: grid; grid-template-columns: repeat(7,1fr);
+  background: var(--surface); border-bottom: 1px solid var(--border); padding: 3px 0;
+}
+.dow-row span { text-align: center; font-size: 10px; color: var(--txt3); font-weight: 600; padding: 2px 0; }
+.dow-row span:first-child { color: var(--sun); }
+.dow-row span:last-child { color: var(--sat); }
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); grid-auto-rows: minmax(80px, 1fr); background: var(--bg); }
+.cal-day {
+  display: flex; flex-direction: column; align-items: stretch;
+  padding: 4px 2px; overflow: hidden;
+  border-right: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border);
+  cursor: pointer; position: relative; user-select: none;
+}
+.cal-day:active { background: var(--surface); }
+.cal-day.today { background: rgba(232,146,124,0.08); }
+.cal-day.empty { cursor: default; }
+.cal-day.selected { background: rgba(232,146,124,0.2); outline: 1.5px solid var(--coral); outline-offset: -1px; }
+.dn { font-size: 11px; font-weight: 600; color: var(--txt2); text-align: center; line-height: 1.3; }
+.dn.sun { color: var(--sun); }
+.dn.sat { color: var(--sat); }
+.dn.td  { color: var(--coral); font-weight: 700; }
+.dn.dim { color: var(--border); }
+.badge { border-radius: 4px; text-align: center; font-size: 10px; font-weight: 700; padding: 1px 2px; margin: 2px 0 1px; line-height: 1.25; flex-shrink: 0; }
+.b-out  { background: #E8927C; color: #fff; }
+.b-hyu  { background: #2A3A35; color: #7ECFB8; }
+.b-alba { background: #1E2A3A; color: #90BCE8; border: 0.5px solid #90BCE8; }
+.alba-dot { position: absolute; top: 2px; right: 2px; width: 15px; height: 15px; border-radius: 50%; background: #1E2A3A; border: 1.5px solid #90BCE8; color: #90BCE8; font-size: 7px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.day-memo { font-size: 7.5px; color: var(--coral); text-align: center; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 1px; }
+
+/* 선택모드 툴바 */
+.select-toolbar {
+  display: none; background: var(--coral);
+  padding: 8px 16px; flex-shrink: 0;
+  justify-content: space-between; align-items: center;
+}
+.select-toolbar.on { display: flex; }
+.sel-count { color: #fff; font-size: 13px; font-weight: 700; }
+.sel-cancel { color: #fff; font-size: 12px; background: none; border: none; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+
+/* 하단 요약바 */
+.sum-bar {
+  background: var(--surface); padding: 8px 14px;
+  border-top: 1px solid var(--border); flex-shrink: 0;
+}
+/* 급여방식 라디오 */
+.pay-radio { display: flex; gap: 6px; margin-bottom: 8px; }
+.radio-btn {
+  flex: 1; height: 34px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--txt3); font-size: 12px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s;
+}
+.radio-btn.active { border-color: var(--coral); background: rgba(232,146,124,0.12); color: var(--coral); }
+.radio-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; }
+.radio-dot.on::after { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--coral); }
+
+/* 수익 요약 */
+.sum-row { display: flex; justify-content: space-between; align-items: center; }
+.sum-left { display: flex; align-items: baseline; gap: 8px; }
+.sum-total { color: var(--coral); font-size: 16px; font-weight: 700; }
+.sum-sub { color: var(--txt3); font-size: 10px; }
+.btn-bulk {
+  background: var(--coral); color: #fff;
+  font-size: 11px; font-weight: 600;
+  padding: 0 12px; height: 30px;
+  border-radius: 6px; border: none; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 하단 탭 */
+.bottom-nav { background: var(--surface); height: 56px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); flex-shrink: 0; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+.nav-icon { font-size: 18px; filter: grayscale(1) opacity(0.35); }
+.nav-icon.on { filter: none; }
+.nav-lbl { font-size: 9px; color: var(--txt3); }
+.nav-lbl.on { color: var(--coral); font-weight: 600; }
+
+/* 일괄편집 팝업 */
+.popup-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; justify-content: center; align-items: flex-end; }
+.popup-overlay.on { display: flex; }
+.bulk-popup {
+  background: var(--surface); border-radius: 20px 20px 0 0;
+  padding: 20px 20px 40px; width: 360px;
+  border: 1px solid var(--border);
+}
+.popup-title { color: var(--txt1); font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.popup-sub { color: var(--txt3); font-size: 11px; margin-bottom: 16px; }
+.popup-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.popup-lbl { color: var(--txt2); font-size: 13px; }
+.popup-ctrl { display: flex; align-items: center; gap: 8px; }
+.popup-btn { background: var(--card); border: 0.5px solid var(--border); color: var(--coral); font-size: 16px; font-weight: 700; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.popup-val { color: var(--txt1); font-size: 14px; font-weight: 700; min-width: 60px; text-align: center; }
+.popup-confirm { width: 100%; height: 46px; background: var(--coral); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
+.popup-close-btn { position: absolute; top: 16px; right: 20px; background: none; border: none; color: var(--txt3); font-size: 20px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div class="statusbar"><span>9:41</span><span>🔋 100%</span></div>
+  <div class="appbar">
+    <span class="app-title">공수계산 업무일지</span>
+    <div class="month-nav">
+      <button onclick="changeMonth(-1)">◀</button>
+      <span id="monthLabel"></span>
+      <button onclick="changeMonth(1)">▶</button>
+    </div>
+  </div>
+  <div class="dow-row">
+    <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+  </div>
+
+  <!-- 선택모드 툴바 -->
+  <div class="select-toolbar" id="selectToolbar">
+    <span class="sel-count" id="selCount">0일 선택됨</span>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="sel-cancel" onclick="openBulk()" style="background:#fff;color:var(--coral);font-weight:700;padding:5px 12px;border-radius:6px;">일괄편집</button>
+      <button class="sel-cancel" onclick="exitSelect()">취소</button>
+    </div>
+  </div>
+
+  <!-- 전체 스크롤 영역 시작 (캘린더 + 수익계산) -->
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;scrollbar-width:none;-ms-overflow-style:none;" id="mainScroll">
+
+  <!-- 캘린더 그리드 (첫 화면 가득 채움) -->
+  <div class="cal-grid" id="calGrid" style="min-height:560px;flex-shrink:0;"></div>
+
+    <!-- 요약바 -->
+    <div class="sum-bar" style="border-top:1px solid var(--border);">
+      <div class="sum-row">
+        <div class="sum-left">
+          <span class="sum-total" id="sumTotal">3,481,200원</span>
+          <span class="sum-sub" id="sumSub">20.0공수 · 3.3%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 수익 계산 화면 -->
+    <div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px;">
+      <div style="color:var(--txt3);font-size:10px;font-weight:700;letter-spacing:0.5px;">수익 계산</div>
+
+      <!-- 일당 / 일비 -->
+      <div style="background:var(--card);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;">
+        <div style="display:flex;align-items:center;border-bottom:0.5px solid var(--border);height:44px;">
+          <span style="color:var(--txt3);font-size:11px;width:56px;text-align:center;flex-shrink:0;">일당</span>
+          <div style="width:0.5px;height:100%;background:var(--border);"></div>
+          <button onclick="changeMyD2(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
+          <input id="myD2Val" value="180,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitMyD2(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:13px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
+          <button onclick="changeMyD2(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
+        </div>
+        <div style="display:flex;align-items:center;height:44px;">
+          <span style="color:var(--txt3);font-size:11px;width:56px;text-align:center;flex-shrink:0;">일비</span>
+          <div style="width:0.5px;height:100%;background:var(--border);"></div>
+          <button onclick="changeIlbi(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
+          <input id="ilbiVal" value="0원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitIlbi(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:13px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
+          <button onclick="changeIlbi(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
+        </div>
+      </div>
+
+      <!-- 급여방식 라디오 -->
+      <div class="pay-radio" style="margin-bottom:0;">
+        <button class="radio-btn active" id="rb1" onclick="selectPay(1)">
+          <span class="radio-dot on"></span> 일반급여식
+        </button>
+        <button class="radio-btn" id="rb0" onclick="selectPay(0)">
+          <span class="radio-dot"></span> 팀장정산식
+        </button>
+      </div>
+
+      <!-- 팀장정산식 -->
+      <div id="calc0" style="background:var(--card);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;display:none;">
+        <div style="padding:10px 14px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <span style="color:var(--txt1);font-size:13px;font-weight:700;">팀장정산식</span>
+          <span style="color:var(--txt3);font-size:11px;" id="gs-label0"></span>
+        </div>
+        <!-- 세금 선택 -->
+        <div style="padding:8px 14px;border-bottom:0.5px solid var(--border);display:flex;gap:8px;">
+          <button id="t0r1" onclick="setTax(0,1)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--coral);background:rgba(232,146,124,0.12);color:var(--coral);font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">● 4대보험</button>
+          <button id="t0r0" onclick="setTax(0,0)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--txt3);font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">○ 3.3%</button>
+        </div>
+        <!-- 풀단가 -->
+        <div style="display:flex;align-items:center;border-bottom:0.5px solid var(--border);height:44px;">
+          <span style="color:var(--txt3);font-size:11px;width:56px;text-align:center;flex-shrink:0;">풀단가</span>
+          <div style="width:0.5px;height:100%;background:var(--border);"></div>
+          <button onclick="changeFull(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
+          <input id="fullVal" value="220,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitFull(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:13px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
+          <button onclick="changeFull(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
+        </div>
+        <!-- 내 단가 -->
+        <div style="display:flex;align-items:center;border-bottom:0.5px solid var(--border);height:44px;">
+          <span style="color:var(--txt3);font-size:11px;width:56px;text-align:center;flex-shrink:0;">내 단가</span>
+          <div style="width:0.5px;height:100%;background:var(--border);"></div>
+          <button onclick="changeMyD(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
+          <input id="myDVal" value="180,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitMyD(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:13px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
+          <button onclick="changeMyD(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
+        </div>
+        <!-- 결과 -->
+        <div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">내 통장 입금</span>
+            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c0-in">-</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">팀장 송금액</span>
+            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c0-send">-</span>
+          </div>
+          <div style="height:0.5px;background:var(--border);"></div>
+          <div id="ilbiRow0" style="display:none;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">일비 3.3 공제후 (<span id="c0-attenddays">0</span>일)</span>
+            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c0-ilbitax">-</span>
+          </div>
+          <div id="albaRow0" style="display:none;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">알바 (<span id="c0-albadays">0</span>일) 3.3 공제후</span>
+            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c0-albanet">-</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">내 실수령</span>
+            <span style="color:var(--coral);font-size:14px;font-weight:700;" id="c0-net">-</span>
+          </div>
+        </div>
+        <!-- 근거 박스 -->
+        <div style="margin:0 14px 12px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:8px;">
+          <div style="color:var(--coral);font-size:10px;font-weight:700;margin-bottom:6px;">계산 근거</div>
+          <div style="color:var(--txt3);font-size:11px;line-height:1.8;">
+            내 통장 입금 = 풀단가 × 공수 × (1 - 세율)<br>
+            내 실수령(급여) = 내 단가 × 공수 × (1 - 세율)<br>
+            일비 실수령 &nbsp;&nbsp;&nbsp;= (출근일수 × 일비단가) - 3.3% 공제<br>
+            내 실수령 &nbsp;&nbsp;= 내 실수령(급여) + 일비 실수령<br>
+            팀장 송금액 = 내 통장 입금 - 내 실수령(급여)<br>
+            <br>
+            <span style="color:var(--txt3);font-size:10px;">* 3.3% — 프리랜서 소득세<br>
+            * 4대보험 — 근로자 부담 9.404%<br>
+            &nbsp;&nbsp;(국민연금 4.5% + 건강 3.545% + 장기요양 0.459% + 고용 0.9%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 일반급여식 -->
+      <div id="calc1" style="background:var(--card);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;">
+        <div style="padding:10px 14px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <span style="color:var(--txt1);font-size:13px;font-weight:700;">일반급여식</span>
+          <span style="color:var(--txt3);font-size:11px;" id="gs-label1"></span>
+        </div>
+        <!-- 세금 선택 -->
+        <div style="padding:8px 14px;border-bottom:0.5px solid var(--border);display:flex;gap:8px;">
+          <button id="t1r1" onclick="setTax(1,1)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--coral);background:rgba(232,146,124,0.12);color:var(--coral);font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">● 4대보험</button>
+          <button id="t1r0" onclick="setTax(1,0)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--txt3);font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">○ 3.3%</button>
+        </div>
+        <!-- 결과 -->
+        <div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">총 급여</span>
+            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c1-gross">-</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;" id="c1-taxlbl">공제액 (4대보험)</span>
+            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c1-tax">-</span>
+          </div>
+          <div style="height:0.5px;background:var(--border);"></div>
+          <div id="ilbiRow" style="display:none;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">일비 3.3 공제후 (<span id="c1-attenddays">0</span>일)</span>
+            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c1-ilbitax">-</span>
+          </div>
+          <div id="albaRow1" style="display:none;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">알바 (<span id="c1-albadays">0</span>일) 3.3 공제후</span>
+            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c1-albanet">-</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--txt3);font-size:12px;">실수령</span>
+            <span style="color:var(--coral);font-size:14px;font-weight:700;" id="c1-net">-</span>
+          </div>
+        </div>
+        <!-- 근거 박스 -->
+        <div style="margin:0 14px 12px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:8px;">
+          <div style="color:var(--coral);font-size:10px;font-weight:700;margin-bottom:6px;">계산 근거</div>
+          <div style="color:var(--txt3);font-size:11px;line-height:1.8;">
+            총 급여 = 일당 × 공수<br>
+            공제액 &nbsp;= 총 급여 × 세율<br>
+            실수령 &nbsp;= 총 급여 - 공제액 + 일비 실수령<br>
+            일비 실수령 = (출근일수 × 일비단가) - 3.3% 공제<br>
+            <br>
+            <span style="color:var(--txt3);font-size:10px;">* 3.3% — 프리랜서 소득세<br>
+            * 4대보험 — 근로자 부담 9.404%<br>
+            &nbsp;&nbsp;(국민연금 4.5% + 건강 3.545% + 장기요양 0.459% + 고용 0.9%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- 스크롤 영역 끝 -->
+
+  <!-- 하단 탭 -->
+  <div class="bottom-nav">
+    <div class="nav-item"><span class="nav-icon on">📅</span><span class="nav-lbl on">업무</span></div>
+    <div class="nav-item"><span class="nav-icon">💰</span><span class="nav-lbl">수익</span></div>
+    <div class="nav-item"><span class="nav-icon">👥</span><span class="nav-lbl">팀</span></div>
+    <div class="nav-item"><span class="nav-icon">📢</span><span class="nav-lbl">팀방</span></div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-lbl">설정</span></div>
+  </div>
+</div>
+
+<!-- 일괄편집 팝업 -->
+<div class="popup-overlay" id="bulkPopup">
+  <div class="bulk-popup" style="position:relative;">
+    <button class="popup-close-btn" onclick="closeBulk()">✕</button>
+    <div class="popup-title">선택 일괄편집</div>
+    <div class="popup-sub" id="bulkSub">선택된 날짜에 일괄 적용됩니다</div>
+    <div class="popup-row">
+      <span class="popup-lbl">공수</span>
+      <div class="popup-ctrl">
+        <button class="popup-btn" onclick="changeBS(-1)">－</button>
+        <span class="popup-val" id="bsVal">1.0 공수</span>
+        <button class="popup-btn" onclick="changeBS(1)">＋</button>
+      </div>
+    </div>
+    <div class="popup-row">
+      <span class="popup-lbl">단가</span>
+      <div class="popup-ctrl">
+        <button class="popup-btn" onclick="changeBD(-1)">－</button>
+        <span class="popup-val" id="bdVal">180,000원</span>
+        <button class="popup-btn" onclick="changeBD(1)">＋</button>
+      </div>
+    </div>
+    <button class="popup-confirm" onclick="applyBulk()">적용하기</button>
+  </div>
+</div>
+
+<script>
+var today = new Date();
+var curYear = today.getFullYear();
+var curMonth = today.getMonth();
+var selectedDays = new Set();
+var selectMode = false;
+var payMode = 1; // 0: 팀장정산식, 1: 일반급여식
+var fullDanga = 220000; var myDanga = 180000; var myDanga2 = 180000;
+var gsSteps = [0.5,1,1.5,2,2.5,3,3.5,4];
+var bsIdx = 1; var bdVal = 180000;
+var ilbi = 0;
+var tax0 = 1; var tax1 = 1; // 0:3.3%, 1:4대보험
+var TAX = [0.033, 0.09404];
+
+function changeFull(d){ fullDanga=Math.max(0,fullDanga+d*5000); document.getElementById('fullVal').value=fullDanga.toLocaleString()+'원'; updateSum(); }
+function changeMyD(d){ myDanga=Math.max(0,myDanga+d*5000); document.getElementById('myDVal').value=myDanga.toLocaleString()+'원'; updateSum(); }
+function changeMyD2(d){ myDanga2=Math.max(0,myDanga2+d*5000); document.getElementById('myD2Val').value=myDanga2.toLocaleString()+'원'; updateSum(); }
+function changeIlbi(d){ ilbi=Math.max(0,ilbi+d*5000); document.getElementById('ilbiVal').value=ilbi.toLocaleString()+'원'; updateSum(); }
+
+// 탭해서 키보드로 직접 입력
+function editFocus(el){
+  el.value = el.value.replace(/[^0-9]/g,'');
+  el.select();
+  setTimeout(function(){ el.scrollIntoView({block:'center', behavior:'smooth'}); }, 300);
+}
+function commitFull(el){ fullDanga=Math.max(0, parseInt(el.value.replace(/[^0-9]/g,''))||0); el.value=fullDanga.toLocaleString()+'원'; updateSum(); }
+function commitMyD(el){ myDanga=Math.max(0, parseInt(el.value.replace(/[^0-9]/g,''))||0); el.value=myDanga.toLocaleString()+'원'; updateSum(); }
+function commitMyD2(el){ myDanga2=Math.max(0, parseInt(el.value.replace(/[^0-9]/g,''))||0); el.value=myDanga2.toLocaleString()+'원'; updateSum(); }
+function commitIlbi(el){ ilbi=Math.max(0, parseInt(el.value.replace(/[^0-9]/g,''))||0); el.value=ilbi.toLocaleString()+'원'; updateSum(); }
+
+function setTax(calcIdx, taxIdx) {
+  if(calcIdx===0){ tax0=taxIdx; }
+  else { tax1=taxIdx; }
+  var a0 = taxIdx===0; var pfx = 't'+calcIdx+'r';
+  var btn0 = document.getElementById(pfx+'0');
+  var btn1 = document.getElementById(pfx+'1');
+  if(calcIdx===0){
+    btn0.style.borderColor = tax0===0?'var(--coral)':'var(--border)';
+    btn0.style.background  = tax0===0?'rgba(232,146,124,0.12)':'var(--card)';
+    btn0.style.color       = tax0===0?'var(--coral)':'var(--txt3)';
+    btn0.textContent       = tax0===0?'● 3.3%':'○ 3.3%';
+    btn1.style.borderColor = tax0===1?'var(--coral)':'var(--border)';
+    btn1.style.background  = tax0===1?'rgba(232,146,124,0.12)':'var(--card)';
+    btn1.style.color       = tax0===1?'var(--coral)':'var(--txt3)';
+    btn1.textContent       = tax0===1?'● 4대보험':'○ 4대보험';
+  } else {
+    btn0.style.borderColor = tax1===0?'var(--coral)':'var(--border)';
+    btn0.style.background  = tax1===0?'rgba(232,146,124,0.12)':'var(--card)';
+    btn0.style.color       = tax1===0?'var(--coral)':'var(--txt3)';
+    btn0.textContent       = tax1===0?'● 3.3%':'○ 3.3%';
+    btn1.style.borderColor = tax1===1?'var(--coral)':'var(--border)';
+    btn1.style.background  = tax1===1?'rgba(232,146,124,0.12)':'var(--card)';
+    btn1.style.color       = tax1===1?'var(--coral)':'var(--txt3)';
+    btn1.textContent       = tax1===1?'● 4대보험':'○ 4대보험';
+    document.getElementById('c1-taxlbl').textContent = tax1===0?'공제액 (3.3%)':'공제액 (4대보험)';
+  }
+  updateSum();
+}
+
+var dayData = {};
+
+function key(y,m,d){ return y+'-'+(m+1)+'-'+d; }
+
+function renderCalendar(){
+  var label = curYear+'년 '+(curMonth+1)+'월';
+  document.getElementById('monthLabel').textContent = label;
+  var grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  var first = new Date(curYear, curMonth, 1).getDay();
+  var last = new Date(curYear, curMonth+1, 0).getDate();
+  // 빈칸
+  for(var i=0;i<first;i++){
+    var prev = new Date(curYear, curMonth, -first+i+1).getDate();
+    grid.innerHTML += '<div class="cal-day empty"><span class="dn dim">'+prev+'</span></div>';
+  }
+  for(var d=1;d<=last;d++){
+    var k = key(curYear,curMonth,d);
+    var isToday = (curYear===today.getFullYear()&&curMonth===today.getMonth()&&d===today.getDate());
+    var dow = new Date(curYear,curMonth,d).getDay();
+    var dnCls = dow===0?'dn sun':dow===6?'dn sat':'dn';
+    if(isToday) dnCls += ' td';
+    var sel = selectedDays.has(k) ? ' selected':'';
+    var data = dayData[k];
+    var badge = '';
+    if(data){
+      if(data.type==='hyu') badge='<div class="badge b-hyu">휴무</div>';
+      else if(data.isAlba) badge='<div class="badge b-alba">알바'+data.gs.toFixed(1)+'</div>';
+      else badge='<div class="badge b-out">'+data.gs.toFixed(1)+'</div>';
+    }
+    grid.innerHTML += '<div class="cal-day'+(isToday?' today':'')+sel+'" data-key="'+k+'" data-d="'+d+'" ontouchstart="onTouchStart(this)" ontouchend="onTouchEnd(this)" ontouchmove="onTouchMove()" onclick="onDayClick(this)">'+
+      '<span class="'+dnCls+'">'+d+'</span>'+badge+'</div>';
+  }
+  // 남은칸
+  var remain = 7 - (first+last)%7;
+  if(remain<7){
+    for(var j=1;j<=remain;j++) grid.innerHTML += '<div class="cal-day empty"><span class="dn dim">'+j+'</span></div>';
+  }
+  updateSum();
+}
+
+var longTimer = null; var touchMoved = false;
+function onTouchStart(el){ touchMoved=false; longTimer=setTimeout(function(){ enterSelect(el); },600); }
+function onTouchMove(){ touchMoved=true; clearTimeout(longTimer); }
+function onTouchEnd(el){ clearTimeout(longTimer); }
+
+function enterSelect(el){
+  if(!selectMode){ selectMode=true; document.getElementById('selectToolbar').classList.add('on'); }
+  var k = el.dataset.key;
+  selectedDays.add(k);
+  el.classList.add('selected');
+  updateSelCount();
+}
+
+function onDayClick(el){
+  if(touchMoved) return;
+  var k = el.dataset.key;
+  if(selectMode){
+    if(selectedDays.has(k)){ selectedDays.delete(k); el.classList.remove('selected'); }
+    else{ selectedDays.add(k); el.classList.add('selected'); }
+    updateSelCount();
+    if(selectedDays.size===0) exitSelect();
+  }
+}
+
+function exitSelect(){
+  selectMode=false; selectedDays.clear();
+  document.getElementById('selectToolbar').classList.remove('on');
+  document.querySelectorAll('.cal-day.selected').forEach(function(el){ el.classList.remove('selected'); });
+  updateSelCount();
+}
+
+function updateSelCount(){
+  var n = selectedDays.size;
+  document.getElementById('selCount').textContent = n+'일 선택됨';
+}
+
+function changeMonth(d){ curMonth+=d; if(curMonth<0){curMonth=11;curYear--;} if(curMonth>11){curMonth=0;curYear++;} renderCalendar(); }
+
+function selectPay(n){
+  payMode=n;
+  document.getElementById('rb0').classList.toggle('active',n===0);
+  document.getElementById('rb1').classList.toggle('active',n===1);
+  document.querySelector('#rb0 .radio-dot').classList.toggle('on',n===0);
+  document.querySelector('#rb1 .radio-dot').classList.toggle('on',n===1);
+  document.getElementById('calc0').style.display = n===0 ? 'block' : 'none';
+  document.getElementById('calc1').style.display = n===1 ? 'block' : 'none';
+  // 라디오버튼 dot 표시
+  document.querySelector('#rb0 .radio-dot').classList.toggle('on', n===0);
+  document.querySelector('#rb1 .radio-dot').classList.toggle('on', n===1);
+  updateSum();
+}
+
+function updateSum(){
+  var totalGs=0; var attendDays=0; var albaDays=0; var albaGross=0;
+  Object.values(dayData).forEach(function(d){ 
+    if(d.type==='out'){ 
+      if(d.isAlba){ 
+        albaDays++; 
+        albaGross += (d.danga||0) * (d.gs||1);
+      } else {
+        totalGs+=d.gs; 
+        attendDays++; 
+      }
+    } 
+  });
+  var albaNet = Math.floor(albaGross * (1 - 0.033));
+
+  // 일비 = 출근일수 × 일비단가 (공수와 무관, 식대 개념)
+  var ilbiTotal = attendDays * ilbi;
+  var ilbiTax   = Math.floor(ilbiTotal * 0.033);
+  var ilbiNet   = ilbiTotal - ilbiTax;
+
+  // 팀장정산식
+  var r0 = TAX[tax0];
+  var inAmt  = Math.floor(fullDanga * totalGs * (1-r0));
+  var netAmt = Math.floor(myDanga  * totalGs * (1-r0));
+  var sendAmt = inAmt - netAmt;
+  var netAmtTotal = netAmt + ilbiNet;
+  document.getElementById('c0-in').textContent   = inAmt.toLocaleString()+'원';
+  document.getElementById('c0-net').textContent  = netAmtTotal.toLocaleString()+'원';
+  document.getElementById('c0-send').textContent = sendAmt.toLocaleString()+'원';
+  document.getElementById('ilbiRow0').style.display = ilbiTotal>0 ? 'flex' : 'none';
+  if(ilbiTotal>0){ 
+    document.getElementById('c0-ilbitax').textContent = ilbiNet.toLocaleString()+'원';
+    document.getElementById('c0-attenddays').textContent = attendDays;
+  }
+  document.getElementById('albaRow0').style.display = albaDays>0 ? 'flex' : 'none';
+  if(albaDays>0){ document.getElementById('c0-albadays').textContent = albaDays; document.getElementById('c0-albanet').textContent = albaNet.toLocaleString()+'원'; }
+
+  // 일반급여식
+  var r1 = TAX[tax1];
+  var gross  = myDanga2 * totalGs;
+  var taxAmt = Math.floor(gross * r1);
+  var net1   = gross - taxAmt;
+  var net1Total = net1 + ilbiNet;
+  document.getElementById('c1-gross').textContent = gross.toLocaleString()+'원';
+  document.getElementById('c1-tax').textContent   = taxAmt.toLocaleString()+'원';
+  document.getElementById('c1-net').textContent   = net1Total.toLocaleString()+'원';
+  document.getElementById('ilbiRow').style.display = ilbiTotal>0 ? 'flex' : 'none';
+  if(ilbiTotal>0){ 
+    document.getElementById('c1-ilbitax').textContent = ilbiNet.toLocaleString()+'원';
+    document.getElementById('c1-attenddays').textContent = attendDays;
+  }
+  document.getElementById('albaRow1').style.display = albaDays>0 ? 'flex' : 'none';
+  if(albaDays>0){ document.getElementById('c1-albadays').textContent = albaDays; document.getElementById('c1-albanet').textContent = albaNet.toLocaleString()+'원'; }
+
+  var shown = payMode===0 ? netAmtTotal : net1Total;
+  document.getElementById('sumTotal').textContent = shown.toLocaleString()+'원';
+  var gsLbl = totalGs.toFixed(1)+'공수';
+  if(document.getElementById('gs-label0')) document.getElementById('gs-label0').textContent = gsLbl;
+  if(document.getElementById('gs-label1')) document.getElementById('gs-label1').textContent = gsLbl;
+  document.getElementById('sumSub').innerHTML = '<strong>'+totalGs.toFixed(1)+'</strong>공수 · '+(payMode===0?(tax0===0?'3.3%':'4대보험'):(tax1===0?'3.3%':'4대보험'))+' · '+(payMode===0?'팀장정산':'일반급여');
+}
+
+// 일괄편집 팝업
+function openBulk(){
+  var n = selectedDays.size;
+  document.getElementById('bulkSub').textContent = n>0 ? n+'일 선택 · 일괄 적용됩니다' : '날짜를 먼저 선택해주세요 (꾹 누르기)';
+  isBulkHyu = false; bsIdx = 1;
+  document.getElementById('bsVal').textContent = gsSteps[bsIdx].toFixed(1)+' 공수';
+  document.getElementById('bulkPopup').classList.add('on');
+}
+function closeBulk(){ document.getElementById('bulkPopup').classList.remove('on'); }
+var isBulkHyu = false;
+function changeBS(d){
+  if(isBulkHyu && d>0){ isBulkHyu=false; bsIdx=0; document.getElementById('bsVal').textContent=gsSteps[bsIdx].toFixed(1)+' 공수'; return; }
+  if(!isBulkHyu && d<0 && bsIdx===0){ isBulkHyu=true; document.getElementById('bsVal').textContent='휴무'; return; }
+  bsIdx=Math.max(0,Math.min(gsSteps.length-1,bsIdx+d));
+  document.getElementById('bsVal').textContent=gsSteps[bsIdx].toFixed(1)+' 공수';
+}
+function changeBD(d){ bdVal=Math.max(0,bdVal+d*5000); document.getElementById('bdVal').textContent=bdVal.toLocaleString()+'원'; }
+function applyBulk(){
+  selectedDays.forEach(function(k){
+    if(isBulkHyu){ dayData[k]={ type:'hyu' }; }
+    else{ dayData[k]={ type:'out', gs:gsSteps[bsIdx], danga:bdVal }; }
+  });
+  closeBulk(); exitSelect(); renderCalendar();
+}
+
+// 샘플 데이터
+var m = curMonth; var y = curYear;
+[1,2,4,7,8,9,10,11,14,15,16,17,18,21,22,23,24,25,28].forEach(function(d){
+  dayData[key(y,m,d)]={type:'out',gs:1,danga:180000};
+});
+dayData[key(y,m,5)]={type:'hyu'};
+dayData[key(y,m,12)]={type:'hyu'};
+dayData[key(y,m,19)]={type:'out',gs:1.5,danga:180000};
+// 알바 3일
+dayData[key(y,m,3)]={type:'out',gs:1,danga:160000,isAlba:true};
+dayData[key(y,m,10)]={type:'out',gs:1,danga:160000,isAlba:true};
+dayData[key(y,m,17)]={type:'out',gs:1,danga:160000,isAlba:true};
+
+renderCalendar();
+</script>
+</body>
+</html>

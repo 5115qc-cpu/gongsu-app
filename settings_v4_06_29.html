@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>설정 v1</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg:      #121212;
+  --surface: #1A1A1A;
+  --card:    #1E1E1E;
+  --border:  #2E2E2E;
+  --coral:   #E8927C;
+  --txt1:    #E8E8E8;
+  --txt2:    #CCCCCC;
+  --txt3:    #888888;
+  --row-h:   44px;
+}
+body.ivory {
+  --bg:      #F5F0E8;
+  --surface: #EDE8DC;
+  --card:    #EDE8DC;
+  --border:  #D4C9B0;
+  --txt1:    #222222;
+  --txt2:    #333333;
+  --txt3:    #888888;
+}
+body {
+  background: #0a0a0a;
+  display: flex; justify-content: center;
+  min-height: 100vh; padding: 24px 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.phone {
+  width: 360px; height: 780px;
+  background: var(--bg);
+  border-radius: 36px; border: 1.5px solid var(--border);
+  overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+  display: flex; flex-direction: column;
+}
+.statusbar {
+  background: var(--surface); padding: 6px 14px 3px;
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--txt3); flex-shrink: 0;
+}
+.appbar {
+  background: var(--surface); padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.appbar-title { color: var(--txt1); font-size: 16px; font-weight: 700; }
+.scroll { flex: 1; overflow-y: auto; }
+.scroll::-webkit-scrollbar { width: 2px; }
+.sec-lbl {
+  font-size: 10px; color: var(--coral); font-weight: 700;
+  padding: 12px 14px 5px; letter-spacing: 0.5px;
+}
+.set-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--card); padding: 12px 14px;
+  border-bottom: 0.5px solid var(--border); min-height: var(--row-h);
+}
+.set-row:last-of-type { border-bottom: none; }
+.set-left { display: flex; flex-direction: column; gap: 2px; }
+.set-title { color: var(--txt1); font-size: 14px; font-weight: 600; }
+.set-desc  { color: var(--txt3); font-size: 11px; }
+.set-arrow { color: var(--txt3); font-size: 18px; }
+.set-gap { height: 8px; background: var(--bg); }
+/* 토글 */
+.toggle-wrap { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+.toggle-wrap input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; cursor: pointer; inset: 0;
+  background: #444; border-radius: 22px; transition: .3s;
+}
+.toggle-slider:before {
+  content: ''; position: absolute;
+  width: 16px; height: 16px; left: 3px; bottom: 3px;
+  background: #fff; border-radius: 50%; transition: .3s;
+}
+.toggle-wrap input:checked + .toggle-slider { background: var(--coral); }
+.toggle-wrap input:checked + .toggle-slider:before { transform: translateX(18px); }
+/* 드럼롤 */
+.drum-wrap {
+  overflow: hidden; position: relative; height: 108px;
+  background: var(--bg); margin: 0 14px 12px; border-radius: 10px;
+}
+.drum-highlight {
+  position: absolute; top: 50%; left: 0; right: 0;
+  transform: translateY(-50%); height: 36px;
+  background: rgba(232,146,124,0.1);
+  border-top: 1px solid rgba(232,146,124,0.3);
+  border-bottom: 1px solid rgba(232,146,124,0.3);
+  pointer-events: none; z-index: 0;
+}
+.drum-scroll {
+  overflow-y: scroll; height: 108px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; position: relative; z-index: 2;
+  overscroll-behavior: contain;
+}
+.drum-scroll::-webkit-scrollbar { display: none; }
+.drum-inner { padding-top: 36px; padding-bottom: 36px; }
+.drum-item {
+  height: 36px; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 400; color: #666666; opacity: 0.2;
+  font-family: 'Noto Sans KR', sans-serif; text-align: center; width: 100%;
+  cursor: pointer; transition: font-size .15s ease, color .15s ease, opacity .15s ease;
+}
+/* 뱃지 미리보기 */
+.badge-preview { display: flex; justify-content: space-around; padding: 0 14px 12px; align-items: center; }
+.tbadge {
+  font-size: 11px; font-weight: 700; padding: 5px 10px;
+  border-radius: 20px; border: 0.5px solid transparent;
+}
+/* 로그아웃 */
+.logout { color: #E87C7C !important; }
+/* 하단 탭 */
+.bottom-nav {
+  background: var(--surface); border-top: 1px solid var(--border);
+  display: flex; height: 56px; flex-shrink: 0;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px; cursor: pointer;
+}
+.nav-icon { font-size: 18px; }
+.nav-lbl { font-size: 9px; color: var(--txt3); }
+.nav-lbl.on { color: var(--coral); }
+</style>
+</head>
+<body class="ivory">
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><span>🔋 100%</span></div>
+  <div class="appbar">
+    <span class="appbar-title">설정</span>
+  </div>
+  <div class="scroll">
+
+    <!-- 계정 -->
+    <div class="sec-lbl">계정</div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">이기석</span>
+        <span class="set-desc">010-7619-4645 · 팀장</span>
+      </div>
+      <span class="set-arrow">›</span>
+    </div>
+
+    <div class="set-gap"></div>
+
+    <!-- 화면 표시 -->
+    <div class="sec-lbl">화면 표시</div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">캘린더 단가 표시</span>
+        <span class="set-desc">날짜 칸에 금액 표시</span>
+      </div>
+      <label class="toggle-wrap"><input type="checkbox"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">합계 금액 표시</span>
+        <span class="set-desc">하단 총 수령액 표시</span>
+      </div>
+      <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+    </div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">배경 테마</span>
+        <span class="set-desc" id="themeDesc">아이보리 모드</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:11px;color:var(--txt3);">다크</span>
+        <label class="toggle-wrap">
+          <input type="checkbox" id="darkToggle" onchange="toggleTheme(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 뱃지 색상 테마 -->
+    <div class="set-row" style="flex-direction:column;align-items:stretch;padding:0;">
+      <div style="padding:13px 14px 6px;display:flex;justify-content:space-between;align-items:center;">
+        <div class="set-left">
+          <span class="set-title">뱃지 색상 테마</span>
+          <span class="set-desc">위아래로 돌려서 선택</span>
+        </div>
+      </div>
+      <div class="drum-wrap">
+        <div class="drum-highlight"></div>
+        <div class="drum-scroll" id="drumScroll">
+          <div class="drum-inner" id="drumItems"></div>
+        </div>
+      </div>
+      <div class="badge-preview">
+        <span class="tbadge" id="pvOut">출근 1.0</span>
+        <span class="tbadge" id="pvHyu">휴무</span>
+        <span class="tbadge" id="pvAlba">알바 ⓐ</span>
+      </div>
+    </div>
+
+    <div class="set-gap"></div>
+
+    <!-- 알림 -->
+    <div class="sec-lbl">알림</div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">업무일지 미작성 알림</span>
+        <span class="set-desc">매일 오후 5시</span>
+      </div>
+      <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+    </div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">팀 공지 알림</span>
+        <span class="set-desc">새 공지 등록 시</span>
+      </div>
+      <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+    </div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">팀원 승인 요청 알림</span>
+      </div>
+      <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+    </div>
+
+    <div class="set-gap"></div>
+
+    <!-- 일괄변경 -->
+    <div class="sec-lbl">일괄변경</div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">공수 일괄변경</span>
+        <span class="set-desc">날짜 범위 선택</span>
+      </div>
+      <span class="set-arrow">›</span>
+    </div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">단가 일괄변경</span>
+        <span class="set-desc">날짜 범위 선택</span>
+      </div>
+      <span class="set-arrow">›</span>
+    </div>
+
+    <div class="set-gap"></div>
+
+    <!-- 기타 -->
+    <div class="sec-lbl">기타</div>
+    <div class="set-row">
+      <div class="set-left"><span class="set-title">데이터 백업/복구</span></div>
+      <span class="set-arrow">›</span>
+    </div>
+    <div class="set-row">
+      <div class="set-left">
+        <span class="set-title">문의하기</span>
+        <span class="set-desc">카카오톡 채널</span>
+      </div>
+      <span class="set-arrow">›</span>
+    </div>
+    <div class="set-row">
+      <div class="set-left"><span class="set-title logout">로그아웃</span></div>
+      <span class="set-arrow logout">›</span>
+    </div>
+    <div style="height:8px;"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item"><span class="nav-icon">📅</span><span class="nav-lbl">업무</span></div>
+    <div class="nav-item"><span class="nav-icon">💰</span><span class="nav-lbl">수익</span></div>
+    <div class="nav-item"><span class="nav-icon">👥</span><span class="nav-lbl">팀</span></div>
+    <div class="nav-item"><span class="nav-icon">📢</span><span class="nav-lbl">팀방</span></div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-lbl on">설정</span></div>
+  </div>
+</div>
+
+<script>
+// 테마 전환
+function toggleTheme(isDark) {
+  document.body.classList.toggle('ivory', !isDark);
+  document.getElementById('themeDesc').textContent = isDark ? '다크 모드' : '아이보리 모드';
+}
+
+// 뱃지 테마
+var themes = [
+  { name:'세트 1  앰버+슬레이트+스카이',   out:['#F59E0B','#fff'], hyu:['#1E293B','#94A3B8'], alba:['#0EA5E9','#fff'] },
+  { name:'세트 2  에메랄드+차콜+퍼플',     out:['#10B981','#fff'], hyu:['#1C1C2E','#A78BFA'], alba:['#8B5CF6','#fff'] },
+  { name:'세트 3  로열블루+다크그린+오렌지',out:['#3B82F6','#fff'], hyu:['#14532D','#86EFAC'], alba:['#F97316','#fff'] },
+  { name:'세트 4  코랄+네이비+민트',        out:['#E8927C','#fff'], hyu:['#2A3A35','#7ECFB8'], alba:['#1E2A3A','#90BCE8'] },
+  { name:'세트 5  골드+스모크+코랄',        out:['#D4A017','#fff'], hyu:['#3A3A3A','#CCC'],    alba:['#E8927C','#fff'] },
+  { name:'세트 6  라임+그레이+인디고',      out:['#84CC16','#fff'], hyu:['#374151','#D1D5DB'], alba:['#6366F1','#fff'] },
+];
+var selIdx = 3;
+var ITEM_H = 36;
+var REPEAT = 30;
+var START_COPY = 15;
+var L = themes.length;
+
+function buildDrum() {
+  var items = document.getElementById('drumItems');
+  var html = '';
+  for (var r = 0; r < REPEAT; r++) {
+    for (var i = 0; i < L; i++) {
+      html += '<div class="drum-item">' + themes[i].name + '</div>';
+    }
+  }
+  items.innerHTML = html;
+}
+
+function updateStyles() {
+  var scroll = document.getElementById('drumScroll');
+  var centerRow = Math.round(scroll.scrollTop / ITEM_H);
+  document.querySelectorAll('.drum-item').forEach(function(el, i) {
+    var d = Math.abs(i - centerRow);
+    if (d === 0) {
+      el.style.fontSize = '18px'; el.style.fontWeight = '700';
+      el.style.color = '#E8927C'; el.style.opacity = '1';
+    } else if (d === 1) {
+      el.style.fontSize = '13px'; el.style.fontWeight = '500';
+      el.style.color = '#AAAAAA'; el.style.opacity = '0.6';
+    } else {
+      el.style.fontSize = '11px'; el.style.fontWeight = '400';
+      el.style.color = '#666666'; el.style.opacity = '0.2';
+    }
+  });
+  var active = ((centerRow % L) + L) % L;
+  if (active !== selIdx) { selIdx = active; updatePreview(); }
+}
+
+function recenter() {
+  var scroll = document.getElementById('drumScroll');
+  var setH = L * ITEM_H;
+  var jump = START_COPY * setH;
+  var max = REPEAT * L * ITEM_H;
+  if (scroll.scrollTop < setH * 2) scroll.scrollTop += jump;
+  else if (scroll.scrollTop > max - setH * 3) scroll.scrollTop -= jump;
+}
+
+function updatePreview() {
+  var t = themes[selIdx];
+  var o = document.getElementById('pvOut');
+  var h = document.getElementById('pvHyu');
+  var a = document.getElementById('pvAlba');
+  o.style.background = t.out[0]; o.style.color = t.out[1];
+  h.style.background = t.hyu[0]; h.style.color = t.hyu[1];
+  a.style.background = t.alba[0]; a.style.color = t.alba[1];
+  a.style.borderColor = t.alba[1];
+}
+
+buildDrum();
+updatePreview();
+
+(function() {
+  var scroll = document.getElementById('drumScroll');
+  var place = function() {
+    scroll.scrollTop = (START_COPY * L + selIdx) * ITEM_H;
+    updateStyles();
+  };
+  requestAnimationFrame(function() { requestAnimationFrame(place); });
+  setTimeout(place, 120);
+
+  scroll.addEventListener('scroll', function() {
+    recenter();
+    updateStyles();
+    clearTimeout(scroll._t);
+    scroll._t = setTimeout(function() {
+      var snapped = Math.round(scroll.scrollTop / ITEM_H) * ITEM_H;
+      if (Math.abs(snapped - scroll.scrollTop) > 0.5) {
+        scroll.scrollTo({ top: snapped, behavior: 'smooth' });
+      }
+      updateStyles();
+    }, 110);
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
