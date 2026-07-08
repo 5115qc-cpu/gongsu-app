@@ -62,7 +62,7 @@ body {
   display: grid; grid-template-columns: repeat(7,1fr);
   background: var(--surface); border-bottom: 1px solid var(--border); padding: 3px 0;
 }
-.dow-row span { text-align: center; font-size: 10px; color: var(--txt3); font-weight: 600; padding: 2px 0; }
+.dow-row span { text-align: center; font-size: 12px; color: var(--txt3); font-weight: 600; padding: 2px 0; }
 .dow-row span:first-child { color: var(--sun); }
 .dow-row span:last-child { color: var(--sat); }
 .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); grid-auto-rows: minmax(80px, 1fr); background: var(--bg); }
@@ -76,12 +76,12 @@ body {
 .cal-day.today { background: rgba(232,146,124,0.08); }
 .cal-day.empty { cursor: default; }
 .cal-day.selected { background: rgba(232,146,124,0.2); outline: 1.5px solid var(--coral); outline-offset: -1px; }
-.dn { font-size: 11px; font-weight: 600; color: var(--txt2); text-align: center; line-height: 1.3; }
+.dn { font-size: 12px; font-weight: 600; color: var(--txt2); text-align: center; line-height: 1.3; }
 .dn.sun { color: var(--sun); }
 .dn.sat { color: var(--sat); }
 .dn.td  { color: var(--coral); font-weight: 700; }
 .dn.dim { color: var(--border); }
-.badge { border-radius: 4px; text-align: center; font-size: 10px; font-weight: 700; padding: 1px 2px; margin: 2px 0 1px; line-height: 1.25; flex-shrink: 0; }
+.badge { border-radius: 4px; text-align: center; font-size: 11px; font-weight: 700; padding: 1px 2px; margin: 2px 0 1px; line-height: 1.25; flex-shrink: 0; }
 .b-out  { background: #E8927C; color: #fff; }
 .b-hyu  { background: #2A3A35; color: #7ECFB8; }
 .b-alba { background: #1E2A3A; color: #90BCE8; border: 0.5px solid #90BCE8; }
@@ -119,8 +119,8 @@ body {
 /* 수익 요약 */
 .sum-row { display: flex; justify-content: space-between; align-items: center; }
 .sum-left { display: flex; align-items: baseline; gap: 8px; }
-.sum-total { color: var(--coral); font-size: 16px; font-weight: 700; }
-.sum-sub { color: var(--txt3); font-size: 10px; }
+.sum-total { color: var(--coral); font-size: 19px; font-weight: 700; }
+.sum-sub { color: var(--txt3); font-size: 12px; }
 .btn-bulk {
   background: var(--coral); color: #fff;
   font-size: 11px; font-weight: 600;
@@ -197,23 +197,23 @@ body {
     </div>
 
     <!-- 수익 계산 화면 -->
-    <div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px;">
-      <div style="color:var(--txt3);font-size:10px;font-weight:700;letter-spacing:0.5px;">수익 계산</div>
+    <div style="padding:12px 5px;display:flex;flex-direction:column;gap:10px;">
+      <div style="color:var(--txt3);font-size:14px;font-weight:700;letter-spacing:0.5px;">수익 계산( 기본 정보 )</div>
 
       <!-- 일당 / 일비 -->
       <div style="background:var(--card);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;">
         <div style="display:flex;align-items:center;border-bottom:0.5px solid var(--border);height:44px;">
-          <span style="color:var(--txt3);font-size:11px;width:56px;text-align:center;flex-shrink:0;">일당</span>
+          <span style="color:var(--txt3);font-size:14px;width:70px;text-align:center;flex-shrink:0;">일당</span>
           <div style="width:0.5px;height:100%;background:var(--border);"></div>
           <button onclick="changeMyD2(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
-          <input id="myD2Val" value="180,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitMyD2(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:13px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
+          <input id="myD2Val" value="180,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitMyD2(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:15px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
           <button onclick="changeMyD2(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
         </div>
         <div style="display:flex;align-items:center;height:44px;">
-          <span style="color:var(--txt3);font-size:11px;width:56px;text-align:center;flex-shrink:0;">일비</span>
+          <span style="color:var(--txt3);font-size:14px;width:70px;text-align:center;flex-shrink:0;">일비</span>
           <div style="width:0.5px;height:100%;background:var(--border);"></div>
           <button onclick="changeIlbi(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
-          <input id="ilbiVal" value="0원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitIlbi(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:13px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
+          <input id="ilbiVal" value="0원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitIlbi(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:15px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
           <button onclick="changeIlbi(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
         </div>
       </div>
@@ -231,65 +231,65 @@ body {
       <!-- 팀장정산식 -->
       <div id="calc0" style="background:var(--card);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;display:none;">
         <div style="padding:10px 14px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <span style="color:var(--txt1);font-size:13px;font-weight:700;">팀장정산식</span>
-          <span style="color:var(--txt3);font-size:11px;" id="gs-label0"></span>
+          <span style="color:var(--txt1);font-size:18px;font-weight:700;">팀장정산식</span>
+          <span style="color:var(--txt3);font-size:14px;" id="gs-label0"></span>
         </div>
         <!-- 세금 선택 -->
         <div style="padding:8px 14px;border-bottom:0.5px solid var(--border);display:flex;gap:8px;">
-          <button id="t0r1" onclick="setTax(0,1)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--coral);background:rgba(232,146,124,0.12);color:var(--coral);font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">● 4대보험</button>
-          <button id="t0r0" onclick="setTax(0,0)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--txt3);font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">○ 3.3%</button>
+          <button id="t0r1" onclick="setTax(0,1)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--coral);background:rgba(232,146,124,0.12);color:var(--coral);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">● 4대보험</button>
+          <button id="t0r0" onclick="setTax(0,0)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--txt3);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">○ 3.3%</button>
         </div>
         <!-- 풀단가 -->
         <div style="display:flex;align-items:center;border-bottom:0.5px solid var(--border);height:44px;">
-          <span style="color:var(--txt3);font-size:11px;width:56px;text-align:center;flex-shrink:0;">풀단가</span>
+          <span style="color:var(--txt3);font-size:14px;width:70px;text-align:center;flex-shrink:0;">풀단가</span>
           <div style="width:0.5px;height:100%;background:var(--border);"></div>
           <button onclick="changeFull(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
-          <input id="fullVal" value="220,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitFull(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:13px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
+          <input id="fullVal" value="220,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitFull(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:15px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
           <button onclick="changeFull(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
         </div>
         <!-- 내 단가 -->
         <div style="display:flex;align-items:center;border-bottom:0.5px solid var(--border);height:44px;">
-          <span style="color:var(--txt3);font-size:11px;width:56px;text-align:center;flex-shrink:0;">내 단가</span>
+          <span style="color:var(--txt3);font-size:14px;width:70px;text-align:center;flex-shrink:0;">내 단가</span>
           <div style="width:0.5px;height:100%;background:var(--border);"></div>
           <button onclick="changeMyD(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
-          <input id="myDVal" value="180,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitMyD(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:13px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
+          <input id="myDVal" value="180,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitMyD(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:15px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
           <button onclick="changeMyD(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
         </div>
         <!-- 결과 -->
         <div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;">
           <div style="display:flex;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">내 통장 입금</span>
-            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c0-in">-</span>
+            <span style="color:var(--txt3);font-size:15px;">내 통장 입금</span>
+            <span style="color:var(--txt2);font-size:15px;font-weight:600;" id="c0-in">-</span>
           </div>
           <div style="display:flex;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">팀장 송금액</span>
-            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c0-send">-</span>
+            <span style="color:var(--txt3);font-size:15px;">팀장 송금액</span>
+            <span style="color:var(--txt2);font-size:15px;font-weight:600;" id="c0-send">-</span>
           </div>
           <div style="height:0.5px;background:var(--border);"></div>
           <div id="ilbiRow0" style="display:none;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">일비 3.3 공제후 (<span id="c0-attenddays">0</span>일)</span>
-            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c0-ilbitax">-</span>
+            <span style="color:var(--txt3);font-size:15px;">일비 3.3 공제후 (<span id="c0-attenddays">0</span>일)</span>
+            <span style="color:var(--txt2);font-size:15px;font-weight:600;" id="c0-ilbitax">-</span>
           </div>
           <div id="albaRow0" style="display:none;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">알바 (<span id="c0-albadays">0</span>일) 3.3 공제후</span>
-            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c0-albanet">-</span>
+            <span style="color:var(--txt3);font-size:15px;">알바 ( 총 <span id="c0-albags">0</span> 공수 ) 3.3 공제후</span>
+            <span style="color:var(--txt2);font-size:15px;font-weight:600;" id="c0-albanet">-</span>
           </div>
           <div style="display:flex;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">내 실수령</span>
-            <span style="color:var(--coral);font-size:14px;font-weight:700;" id="c0-net">-</span>
+            <span style="color:var(--txt3);font-size:15px;">내 실수령</span>
+            <span style="color:var(--coral);font-size:20px;font-weight:700;" id="c0-net">-</span>
           </div>
         </div>
         <!-- 근거 박스 -->
         <div style="margin:0 14px 12px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:8px;">
-          <div style="color:var(--coral);font-size:10px;font-weight:700;margin-bottom:6px;">계산 근거</div>
-          <div style="color:var(--txt3);font-size:11px;line-height:1.8;">
+          <div style="color:var(--coral);font-size:12px;font-weight:700;margin-bottom:6px;">계산 근거</div>
+          <div style="color:var(--txt3);font-size:12px;line-height:1.8;">
             내 통장 입금 = 풀단가 × 공수 × (1 - 세율)<br>
             내 실수령(급여) = 내 단가 × 공수 × (1 - 세율)<br>
             일비 실수령 &nbsp;&nbsp;&nbsp;= (출근일수 × 일비단가) - 3.3% 공제<br>
             내 실수령 &nbsp;&nbsp;= 내 실수령(급여) + 일비 실수령<br>
             팀장 송금액 = 내 통장 입금 - 내 실수령(급여)<br>
             <br>
-            <span style="color:var(--txt3);font-size:10px;">* 3.3% — 프리랜서 소득세<br>
+            <span style="color:var(--txt3);font-size:12px;">* 3.3% — 프리랜서 소득세<br>
             * 4대보험 — 근로자 부담 9.404%<br>
             &nbsp;&nbsp;(국민연금 4.5% + 건강 3.545% + 장기요양 0.459% + 고용 0.9%)</span>
           </div>
@@ -299,48 +299,48 @@ body {
       <!-- 일반급여식 -->
       <div id="calc1" style="background:var(--card);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;">
         <div style="padding:10px 14px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <span style="color:var(--txt1);font-size:13px;font-weight:700;">일반급여식</span>
-          <span style="color:var(--txt3);font-size:11px;" id="gs-label1"></span>
+          <span style="color:var(--txt1);font-size:18px;font-weight:700;">일반급여식</span>
+          <span style="color:var(--txt3);font-size:14px;" id="gs-label1"></span>
         </div>
         <!-- 세금 선택 -->
         <div style="padding:8px 14px;border-bottom:0.5px solid var(--border);display:flex;gap:8px;">
-          <button id="t1r1" onclick="setTax(1,1)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--coral);background:rgba(232,146,124,0.12);color:var(--coral);font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">● 4대보험</button>
-          <button id="t1r0" onclick="setTax(1,0)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--txt3);font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">○ 3.3%</button>
+          <button id="t1r1" onclick="setTax(1,1)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--coral);background:rgba(232,146,124,0.12);color:var(--coral);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">● 4대보험</button>
+          <button id="t1r0" onclick="setTax(1,0)" style="flex:1;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--txt3);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">○ 3.3%</button>
         </div>
         <!-- 결과 -->
         <div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;">
           <div style="display:flex;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">총 급여</span>
-            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c1-gross">-</span>
+            <span style="color:var(--txt3);font-size:15px;">총 급여</span>
+            <span style="color:var(--txt2);font-size:15px;font-weight:600;" id="c1-gross">-</span>
           </div>
           <div style="display:flex;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;" id="c1-taxlbl">공제액 (4대보험)</span>
-            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c1-tax">-</span>
+            <span style="color:var(--txt3);font-size:15px;" id="c1-taxlbl">공제액 (4대보험)</span>
+            <span style="color:var(--txt2);font-size:15px;font-weight:600;" id="c1-tax">-</span>
           </div>
           <div style="height:0.5px;background:var(--border);"></div>
           <div id="ilbiRow" style="display:none;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">일비 3.3 공제후 (<span id="c1-attenddays">0</span>일)</span>
-            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c1-ilbitax">-</span>
+            <span style="color:var(--txt3);font-size:15px;">일비 3.3 공제후 (<span id="c1-attenddays">0</span>일)</span>
+            <span style="color:var(--txt2);font-size:15px;font-weight:600;" id="c1-ilbitax">-</span>
           </div>
           <div id="albaRow1" style="display:none;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">알바 (<span id="c1-albadays">0</span>일) 3.3 공제후</span>
-            <span style="color:var(--txt2);font-size:12px;font-weight:600;" id="c1-albanet">-</span>
+            <span style="color:var(--txt3);font-size:15px;">알바 ( 총 <span id="c1-albags">0</span> 공수 ) 3.3 공제후</span>
+            <span style="color:var(--txt2);font-size:15px;font-weight:600;" id="c1-albanet">-</span>
           </div>
           <div style="display:flex;justify-content:space-between;">
-            <span style="color:var(--txt3);font-size:12px;">실수령</span>
-            <span style="color:var(--coral);font-size:14px;font-weight:700;" id="c1-net">-</span>
+            <span style="color:var(--txt3);font-size:15px;">실수령</span>
+            <span style="color:var(--coral);font-size:20px;font-weight:700;" id="c1-net">-</span>
           </div>
         </div>
         <!-- 근거 박스 -->
         <div style="margin:0 14px 12px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:8px;">
-          <div style="color:var(--coral);font-size:10px;font-weight:700;margin-bottom:6px;">계산 근거</div>
-          <div style="color:var(--txt3);font-size:11px;line-height:1.8;">
+          <div style="color:var(--coral);font-size:12px;font-weight:700;margin-bottom:6px;">계산 근거</div>
+          <div style="color:var(--txt3);font-size:12px;line-height:1.8;">
             총 급여 = 일당 × 공수<br>
             공제액 &nbsp;= 총 급여 × 세율<br>
             실수령 &nbsp;= 총 급여 - 공제액 + 일비 실수령<br>
             일비 실수령 = (출근일수 × 일비단가) - 3.3% 공제<br>
             <br>
-            <span style="color:var(--txt3);font-size:10px;">* 3.3% — 프리랜서 소득세<br>
+            <span style="color:var(--txt3);font-size:12px;">* 3.3% — 프리랜서 소득세<br>
             * 4대보험 — 근로자 부담 9.404%<br>
             &nbsp;&nbsp;(국민연금 4.5% + 건강 3.545% + 장기요양 0.459% + 고용 0.9%)</span>
           </div>
@@ -539,11 +539,12 @@ function selectPay(n){
 }
 
 function updateSum(){
-  var totalGs=0; var attendDays=0; var albaDays=0; var albaGross=0;
+  var totalGs=0; var attendDays=0; var albaDays=0; var albaGross=0; var albaGs=0;
   Object.values(dayData).forEach(function(d){ 
     if(d.type==='out'){ 
       if(d.isAlba){ 
         albaDays++; 
+        albaGs += (d.gs||1);
         albaGross += (d.danga||0) * (d.gs||1);
       } else {
         totalGs+=d.gs; 
@@ -573,7 +574,7 @@ function updateSum(){
     document.getElementById('c0-attenddays').textContent = attendDays;
   }
   document.getElementById('albaRow0').style.display = albaDays>0 ? 'flex' : 'none';
-  if(albaDays>0){ document.getElementById('c0-albadays').textContent = albaDays; document.getElementById('c0-albanet').textContent = albaNet.toLocaleString()+'원'; }
+  if(albaDays>0){ document.getElementById('c0-albags').textContent = albaGs%1===0 ? albaGs.toFixed(0) : albaGs.toFixed(1); document.getElementById('c0-albanet').textContent = albaNet.toLocaleString()+'원'; }
 
   // 일반급여식
   var r1 = TAX[tax1];
@@ -590,7 +591,7 @@ function updateSum(){
     document.getElementById('c1-attenddays').textContent = attendDays;
   }
   document.getElementById('albaRow1').style.display = albaDays>0 ? 'flex' : 'none';
-  if(albaDays>0){ document.getElementById('c1-albadays').textContent = albaDays; document.getElementById('c1-albanet').textContent = albaNet.toLocaleString()+'원'; }
+  if(albaDays>0){ document.getElementById('c1-albags').textContent = albaGs%1===0 ? albaGs.toFixed(0) : albaGs.toFixed(1); document.getElementById('c1-albanet').textContent = albaNet.toLocaleString()+'원'; }
 
   var shown = payMode===0 ? netAmtTotal : net1Total;
   document.getElementById('sumTotal').textContent = shown.toLocaleString()+'원';
