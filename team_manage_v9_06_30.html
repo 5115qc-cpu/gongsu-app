@@ -9,29 +9,24 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: #0a0a0a;
+  background: #121212;
   display: flex; justify-content: center; align-items: flex-start;
-  min-height: 100vh; padding: 24px 12px;
+  min-height: 100vh; padding: 0;
   font-family: 'Noto Sans KR', sans-serif;
 }
 
 /* ── 폰 껍데기 ── */
 .phone {
-  width: 360px; height: 780px;
+  width: 100%; max-width: 480px; height: 100vh;
   background: #121212;
-  border-radius: 36px; border: 1.5px solid #2E2E2E;
-  overflow: hidden; box-shadow: 0 28px 80px rgba(0,0,0,0.8);
+  border-radius: 0; border: none;
+  overflow: hidden; box-shadow: none;
   display: flex; flex-direction: column;
   position: relative;
   flex-shrink: 0;
 }
 
 /* ── 공통 ── */
-.statusbar {
-  background: #1A1A1A; padding: 7px 16px 3px;
-  display: flex; justify-content: space-between;
-  font-size: 10px; color: #555; flex-shrink: 0;
-}
 .appbar {
   background: #1A1A1A; padding: 9px 14px;
   display: flex; justify-content: space-between; align-items: center;
@@ -83,9 +78,8 @@ body {
 .alert-text { color: #CCC; font-size: 12px; line-height: 1.5; flex: 1; }
 .alert-text b { color: #E8E8E8; }
 .alert-time { color: #666; font-size: 10px; flex-shrink: 0; }
-.scroll { flex: 1; overflow-y: auto; }
-.scroll::-webkit-scrollbar { width: 2px; }
-.scroll::-webkit-scrollbar-thumb { background: #2E2E2E; }
+.scroll { flex: 1; overflow-y: auto; padding: 0 5px; scrollbar-width: none; -ms-overflow-style: none; }
+.scroll::-webkit-scrollbar { display: none; }
 
 /* ── 하단 탭 ── */
 .bottom-nav {
@@ -167,7 +161,7 @@ body {
 /* ── 팀 카드 ── */
 .team-card {
   background: linear-gradient(135deg, #2A1810, #1A1008);
-  margin: 10px 10px 0; border-radius: 12px;
+  margin: 10px 0 0; border-radius: 12px;
   padding: 12px 14px; border: 1px solid #4A2A18;
 }
 .team-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
@@ -199,11 +193,11 @@ body {
 .sv-total { color: #E8E8E8; } .sv-out { color: #E8927C; } .sv-hyu { color: #7ECFB8; } .sv-none { color: #7A9CD4; }
 
 /* ── 섹션 헤더 ── */
-.sec-hdr { padding: 10px 12px 5px; }
+.sec-hdr { padding: 10px 7px 5px; }
 .sec-ttl { color: #888; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
 
 /* ── 팀원 카드 ── */
-.member-card { margin: 0 10px 4px; background: #1E1E1E; border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.member-card { margin: 0 0 4px; background: #1E1E1E; border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
 .member-card:active { background: #2A2A2A; }
 .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
 .av-coral { background: #2A1810; color: #E8927C; border: 1.5px solid #E8927C; }
@@ -271,7 +265,7 @@ body {
 .att-scroll::-webkit-scrollbar { width: 2px; }
 .att-scroll::-webkit-scrollbar-thumb { background: #2E2E2E; }
 
-.att-card { margin: 0 10px 8px; background: #1E1E1E; border-radius: 10px; padding: 10px 12px; }
+.att-card { margin: 0 0 8px; background: #1E1E1E; border-radius: 10px; padding: 10px 12px; }
 .att-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .att-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
 .att-info { flex: 1; }
@@ -287,12 +281,11 @@ body {
 .s-abs  { background: #2A0A0A; color: #E87C7C; border-color: #E87C7C; }
 .s-hyu  { background: #2A3A35; color: #7ECFB8; border-color: #7ECFB8; }
 
-.att-confirm { display: block; width: calc(100% - 20px); margin: 6px 10px 8px; padding: 13px; background: #E8927C; color: #fff; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; flex-shrink: 0; }
+.att-confirm { display: block; width: calc(100% - 10px); margin: 6px 5px 8px; padding: 13px; background: #E8927C; color: #fff; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; flex-shrink: 0; }
 </style>
 </head>
 <body>
 <div class="phone">
-  <div class="statusbar"><span>9:41</span><span>🔋 100%</span></div>
   <div class="appbar">
     <span class="appbar-title">팀관리</span>
     <div style="display:flex;align-items:center;gap:8px;">
@@ -393,7 +386,6 @@ body {
 
   <!-- ══ 출석체크 화면 (폰 안에) ══ -->
   <div class="att-screen" id="attScreen">
-    <div class="statusbar"><span>9:41</span><span>🔋 100%</span></div>
     <div class="att-appbar">
       <button class="att-back" onclick="closeAtt()">←</button>
       <span class="att-appbar-title" id="attTitle">출석체크</span>
