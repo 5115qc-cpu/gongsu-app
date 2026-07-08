@@ -26,6 +26,12 @@ body {
   flex-shrink: 0;
 }
 
+.toast-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center; }
+.toast-overlay.show { display:flex; }
+.toast-box { background:#1E1E1E; border:1px solid #2E2E2E; border-radius:14px; padding:24px 20px; width:280px; text-align:center; }
+.toast-msg { color:#E8E8E8; font-size:14px; line-height:1.5; margin-bottom:16px; }
+.toast-ok { background:#E8927C; color:#fff; border:none; border-radius:8px; padding:10px 24px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+
 /* ── 공통 ── */
 .appbar {
   background: #1A1A1A; padding: 9px 14px;
@@ -599,7 +605,7 @@ function saveField(field) {
   const val = parseInt(raw || '0', 10);
   m[field] = val;
   document.getElementById(inputId).value = val.toLocaleString();
-  alert((field==='danga'?'일당':'일비') + '이 저장되었습니다.');
+  showToast((field==='danga'?'일당':'일비') + '이 저장되었습니다.');
 }
 
 function setSukso(val) {
@@ -667,9 +673,9 @@ function saveContact() {
   var role = selectedRole === '기타'
     ? document.getElementById('cRoleCustom').value.trim()
     : selectedRole;
-  if (!name) { alert('이름을 입력해주세요.'); return; }
-  if (!role) { alert('직급을 선택해주세요.'); return; }
-  if (!phone) { alert('전화번호를 입력해주세요.'); return; }
+  if (!name) { showToast('이름을 입력해주세요.'); return; }
+  if (!role) { showToast('직급을 선택해주세요.'); return; }
+  if (!phone) { showToast('전화번호를 입력해주세요.'); return; }
   siteContacts.push({ name:name, role:role, phone:phone });
   closeAddContact();
   renderSiteContacts();
@@ -688,8 +694,13 @@ function updateConfirmRatio() {
 }
 updateConfirmRatio();
 
+function showToast(msg){
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastOverlay').classList.add('show');
+}
+
 function sendOutputConfirm() {
-  alert('전체 팀원에게 이번달 출력확인 요청이 발송되었습니다.');
+  showToast('전체 팀원에게 이번달 출력확인 요청이 발송되었습니다.');
 }
 
 // 오버레이 바깥 터치 시 닫기
@@ -806,6 +817,12 @@ window.addEventListener('load', function(){
     </div>
     <div class="mini-total" id="miniTotal">총 0.0공수</div>
     <div class="confirm-status" id="confirmStatus"></div>
+  </div>
+</div>
+<div class="toast-overlay" id="toastOverlay">
+  <div class="toast-box">
+    <div class="toast-msg" id="toastMsg"></div>
+    <button class="toast-ok" onclick="document.getElementById('toastOverlay').classList.remove('show')">확인</button>
   </div>
 </div>
 </body>
