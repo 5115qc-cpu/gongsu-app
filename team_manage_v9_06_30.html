@@ -26,10 +26,17 @@ body {
   flex-shrink: 0;
 }
 
+.confirm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center; }
+.confirm-overlay.show { display:flex; }
+.confirm-box { background:#1E1E1E; border:1px solid #2E2E2E; border-radius:14px; padding:32px 24px; width:360px; text-align:center; }
+.confirm-msg { color:#E8E8E8; font-size:17px; line-height:1.6; margin-bottom:24px; font-weight:600; }
+.confirm-btns { display:flex; gap:10px; }
+.confirm-cancel { flex:1; background:#2A2A2A; color:#888; border:1px solid #3A3A3A; border-radius:8px; padding:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+.confirm-ok { flex:1; background:#E8927C; color:#fff; border:none; border-radius:8px; padding:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
 .toast-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center; }
 .toast-overlay.show { display:flex; }
-.toast-box { background:#1E1E1E; border:1px solid #2E2E2E; border-radius:14px; padding:24px 20px; width:280px; text-align:center; }
-.toast-msg { color:#E8E8E8; font-size:14px; line-height:1.5; margin-bottom:16px; }
+.toast-box { background:#1E1E1E; border:1px solid #2E2E2E; border-radius:14px; padding:32px 24px; width:360px; text-align:center; }
+.toast-msg { color:#E8E8E8; font-size:16px; line-height:1.6; margin-bottom:20px; white-space:pre-line; }
 .toast-ok { background:#E8927C; color:#fff; border:none; border-radius:8px; padding:10px 24px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
 
 /* ── 공통 ── */
@@ -700,7 +707,18 @@ function showToast(msg){
 }
 
 function sendOutputConfirm() {
-  showToast('전체 팀원에게 이번달 출력확인 요청이 발송되었습니다.');
+  showConfirm('출력확인 캘린더를 전체에게 발송할까요?', function(){
+    showToast('전체 팀원에게 이번달 출력확인\n요청이 발송되었습니다.');
+  });
+}
+
+function showConfirm(msg, onConfirm){
+  document.getElementById('confirmMsg').textContent = msg;
+  document.getElementById('confirmOverlay').classList.add('show');
+  document.getElementById('confirmOkBtn').onclick = function(){
+    document.getElementById('confirmOverlay').classList.remove('show');
+    onConfirm();
+  };
 }
 
 // 오버레이 바깥 터치 시 닫기
@@ -817,6 +835,15 @@ window.addEventListener('load', function(){
     </div>
     <div class="mini-total" id="miniTotal">총 0.0공수</div>
     <div class="confirm-status" id="confirmStatus"></div>
+  </div>
+</div>
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-msg" id="confirmMsg"></div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="document.getElementById('confirmOverlay').classList.remove('show')">취소</button>
+      <button class="confirm-ok" id="confirmOkBtn">확인</button>
+    </div>
   </div>
 </div>
 <div class="toast-overlay" id="toastOverlay">
