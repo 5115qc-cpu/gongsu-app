@@ -63,13 +63,14 @@ body {
 /* ===== 하단 탭바 (calendar_main 원본 재사용) ===== */
 .bottom-nav { background: var(--surface); height: 56px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 99999; }
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; flex: 1; }
-.nav-icon { font-size: 18px; opacity: 0.35; }
-.nav-icon.on { opacity: 1; }
+.nav-icon { width: 24px; height: 24px; color: #555555; display: flex; align-items: center; justify-content: center; }
+.nav-icon.on { color: var(--coral); }
 .nav-lbl { font-size:13px; color: var(--txt3); }
 .nav-lbl.on { color: var(--coral); font-weight: 600; }
 
 /* ===== 업무탭(calendar_main) 스코프 CSS ===== */
-#mainScroll::-webkit-scrollbar { display: none; }
+#mainScroll::-webkit-scrollbar { display: none; padding-bottom: 72px;
+}
 #tab-work .appbar {
   background: var(--surface); padding: 8px 16px;
   display: flex; justify-content: space-between; align-items: center;
@@ -569,7 +570,7 @@ body {
 #rev-leader .tax-btn.active { border-color:var(--coral); background:rgba(232,146,124,0.12); color:var(--coral); }
 #rev-leader .tab-note { color:var(--txt3); font-size:13px; line-height:1.5; padding:0 2px; }
 
-#rev-leader .scroll { flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 5px; display:flex; flex-direction:column; gap:10px; scrollbar-width:none; -ms-overflow-style:none; }
+#rev-leader .scroll { flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 5px 72px; display:flex; flex-direction:column; gap:10px; scrollbar-width:none; -ms-overflow-style:none; }
 #rev-leader .scroll > * { flex-shrink:0; }
 
 /* 순수익 메인카드 */
@@ -682,7 +683,7 @@ body {
 #rev-member .radio-btn.active { border-color:var(--coral); background:rgba(232,146,124,0.12); color:var(--coral); }
 #rev-member .radio-dot { width:10px; height:10px; border-radius:50%; border:2px solid currentColor; display:flex; align-items:center; justify-content:center; }
 #rev-member .radio-dot.on::after { content:''; width:4px; height:4px; border-radius:50%; background:var(--coral); }
-#rev-member .scroll { flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 5px; display:flex; flex-direction:column; gap:10px; scrollbar-width:none; -ms-overflow-style:none; }
+#rev-member .scroll { flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 5px 72px; display:flex; flex-direction:column; gap:10px; scrollbar-width:none; -ms-overflow-style:none; }
 #rev-member .scroll > * { flex-shrink:0; }
 #rev-member .scroll::-webkit-scrollbar { display:none; }
 #rev-member .scroll { scrollbar-width:none; -ms-overflow-style:none; }
@@ -810,7 +811,7 @@ body {
 #tab-team .alert-text { color: #CCC; font-size: 14px; line-height: 1.6; flex: 1; }
 #tab-team .alert-text b { color: #E8E8E8; }
 #tab-team .alert-time { color: #666; font-size:15px; flex-shrink: 0; }
-#tab-team .scroll { flex: 1; overflow-y: auto; padding: 0 5px; scrollbar-width: none; -ms-overflow-style: none; }
+#tab-team .scroll { flex: 1; overflow-y: auto; padding: 0 5px 72px; scrollbar-width: none; -ms-overflow-style: none; }
 #tab-team .scroll::-webkit-scrollbar { display: none; }
 
 /* ── 하단 탭 ── */
@@ -821,7 +822,7 @@ body {
 }
 #tab-team .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
 #tab-team .nav-icon { font-size: 19px; opacity: 0.35; }
-#tab-team .nav-icon.on { opacity: 1; }
+#tab-team .nav-icon.on { color: var(--coral); }
 #tab-team .nav-lbl { font-size:13px; color: #555; }
 #tab-team .nav-lbl.on { color: #E8927C; font-weight: 700; }
 
@@ -1016,7 +1017,7 @@ body {
 #tab-team .bulk-btn { background: #2A1810; color: #E8927C; font-size: 18px; font-weight: 700; border: none; cursor: pointer; padding: 6px 14px; line-height: 1; }
 #tab-team .bulk-val { color: #E8E8E8; font-size: 15px; font-weight: 700; padding: 6px 14px; min-width: 50px; text-align: center; }
 
-#tab-team .att-scroll { flex: 1; overflow-y: auto; padding: 8px 0 4px; }
+#tab-team .att-scroll { flex: 1; overflow-y: auto; padding: 8px 0 64px; }
 #tab-team .att-scroll::-webkit-scrollbar { width: 2px; }
 #tab-team .att-scroll::-webkit-scrollbar-thumb { background: #2E2E2E; }
 
@@ -1036,7 +1037,7 @@ body {
 #tab-team .s-abs  { background: #2A0A0A; color: #E87C7C; border-color: #E87C7C; }
 #tab-team .s-hyu  { background: #2A3A35; color: #7ECFB8; border-color: #7ECFB8; }
 
-#tab-team .att-confirm { display: block; width: calc(100% - 10px); margin: 6px 5px 8px; padding: 13px; background: #E8927C; color: #fff; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; flex-shrink: 0; }
+#tab-team .att-confirm { display: block; width: calc(100% - 10px); margin: 6px 5px 64px; padding: 13px; background: #E8927C; color: #fff; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; flex-shrink: 0; }
 
 /* ===== 팀방탭(team_room) ===== */
 #tab-room .appbar {
@@ -1050,7 +1051,7 @@ body {
   padding: 7px 14px; border-radius: 8px; border: none;
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
 }
-#tab-room .scroll { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+#tab-room .scroll { flex: 1; overflow-y: auto; padding: 12px 12px 72px; display: flex; flex-direction: column; gap: 10px; }
 
 /* 공지 카드 */
 #tab-room .notice-card {
@@ -1110,19 +1111,19 @@ body {
 #tab-room .write-overlay {
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
   z-index: 100; justify-content: center; align-items: flex-start;
-  padding: 100px 20px 20px;
+  padding: 60px 16px 16px;
 }
 #tab-room .write-overlay.show { display: flex; }
 #tab-room .write-sheet {
   background: var(--surface); border-radius: 16px; width: 100%;
   border: 1px solid var(--border); padding: 20px 16px;
 
-  max-height: 80dvh; display: flex; flex-direction: column; overflow: hidden;
+  max-height: calc(100dvh - 120px); display: flex; flex-direction: column; overflow: hidden;
 }
 #tab-room .write-title { color: var(--txt1); font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 #tab-room .write-sub { color: var(--txt3); font-size:13px; margin-bottom: 12px; }
 #tab-room .write-ta {
-  width: 100%; flex: 1; min-height: 120px; background: var(--card);
+  width: 100%; flex: 1; min-height: 270px; background: var(--card);
   border: 0.5px solid var(--border); border-radius: 10px;
   color: var(--txt2); font-size: 14px; padding: 12px 14px;
   resize: none; outline: none; line-height: 1.7;
@@ -1146,13 +1147,14 @@ body {
 #tab-room .detail-overlay {
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
   z-index: 150; justify-content: center; align-items: flex-start;
-  padding: 60px 20px 20px;
+  padding: 60px 16px 16px;
 }
 #tab-room .detail-overlay.show { display: flex; }
 #tab-room .detail-sheet {
   background: var(--surface); border-radius: 16px; width: 100%;
   max-height: 85vh; border: 1px solid var(--border);
   display: flex; flex-direction: column;
+  overflow: hidden;
 }
 #tab-room .detail-head {
   display: flex; align-items: center; gap: 6px;
@@ -1189,6 +1191,48 @@ body {
   display: flex; align-items: center; justify-content: center;
   color: var(--txt3); font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
   flex-shrink: 0; margin: 6px 0;
+}
+
+.nav-icon svg { width: 24px; height: 24px; }
+
+#tab-team .att-appbar-sub { font-size:16px !important; font-weight:700; }
+
+#tab-team .all-out-btn { padding:8px 12px; background:var(--surface); border:1px solid var(--coral); border-radius:8px; color:var(--coral); font-size:13px; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; flex-shrink:0; margin-left:8px; white-space:nowrap; }
+
+/* ===== 로그인 팝업 ===== */
+.login-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:10001; display:none; justify-content:center; align-items:center; }
+.login-overlay.on { display:flex; }
+.login-sheet { background:var(--surface); border-radius:20px; width:calc(100% - 40px); max-width:400px; padding:32px 24px; display:flex; flex-direction:column; align-items:center; gap:16px; }
+.login-logo { font-size:28px; font-weight:900; color:var(--coral); letter-spacing:-1px; }
+.login-sub { font-size:13px; color:var(--txt3); text-align:center; line-height:1.6; }
+.login-btn { width:100%; height:52px; border-radius:12px; border:none; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; font-family:'Noto Sans KR',sans-serif; }
+.login-btn-kakao { background:#FEE500; color:#000; }
+.login-btn-google { background:#fff; color:#333; border:1px solid #ddd; }
+.login-divider { font-size:12px; color:var(--txt3); }
+.login-close { background:none; border:none; color:var(--txt3); font-size:13px; cursor:pointer; padding:8px; font-family:'Noto Sans KR',sans-serif; }
+
+/* ===== 설정 프로필 카드 ===== */
+#tab-settings .set-profile-card {
+  display:flex; align-items:center; gap:14px;
+  background:var(--card); margin:12px 12px 0;
+  border-radius:14px; padding:16px;
+  border:0.5px solid var(--border);
+}
+#tab-settings .set-profile-avatar {
+  width:52px; height:52px; border-radius:50%;
+  background:var(--coral); color:#fff;
+  font-size:20px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+#tab-settings .set-profile-info {
+  flex:1; display:flex; flex-direction:column; gap:4px;
+}
+#tab-settings .set-profile-name {
+  font-size:17px; font-weight:700; color:var(--txt1);
+}
+#tab-settings .set-profile-desc {
+  font-size:13px; color:var(--txt3);
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -1999,7 +2043,7 @@ body {
     <div class="att-appbar">
       <button class="att-back" onclick="tm_closeAtt()">←</button>
       <span class="att-appbar-title" id="attTitle">출석체크</span>
-      <span class="att-appbar-sub">5월 26일</span>
+      <span class="att-appbar-sub" id="attDateSub"></span>
     </div>
     <div class="att-filter-bar">
       <button class="att-ftab f-all"  id="af-all"  onclick="tm_attFilter('all')">전체</button>
@@ -2011,8 +2055,9 @@ body {
     <div class="bulk-row">
       <div>
         <div class="bulk-label">일괄 공수 적용</div>
-        <div class="bulk-hint">휴무 제외 전원 적용</div>
+        <div class="bulk-hint">출근자만 적용</div>
       </div>
+      <button class="all-out-btn" onclick="tm_allOut()">전체출근</button>
       <div class="bulk-gs">
         <button class="bulk-btn" onclick="tm_bulkChange(-1)">－</button>
         <span class="bulk-val" id="bulkVal">1.0</span>
@@ -2170,19 +2215,24 @@ body {
   </div>
 
   <div class="scroll" id="noticeScroll"></div>
+  <div class="ad-banner" id="ad-room-list" style="margin:0 0 72px; border-radius:0; flex-shrink:0;">광고 영역</div>
 
 
 <!-- 글쓰기 팝업 -->
 <div class="write-overlay" id="writeOverlay">
   <div class="write-sheet">
-    <div class="write-title">공지 작성</div>
-    <div class="write-sub" id="writeSub">최대 6개까지 등록됩니다</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div>
+        <div class="write-title">공지 작성</div>
+        <div class="write-sub" id="writeSub">최대 6개까지 등록됩니다</div>
+      </div>
+      <label class="pin-toggle" style="margin:0;">
+        <input type="checkbox" id="pinCheck">
+        <span>상단 고정</span>
+      </label>
+    </div>
     <textarea class="write-ta" id="writeTa" placeholder="공지 내용을 입력하세요 (길이 제한 없음)" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"></textarea>
-    <label class="pin-toggle">
-      <input type="checkbox" id="pinCheck">
-      <span>상단 고정</span>
-    </label>
-    <div class="ad-banner" id="ad-notice">광고 영역</div>
+    <div class="ad-banner" id="ad-notice" style="margin:8px 0;">광고 영역</div>
     <div class="write-btns">
       <button class="write-cancel" onclick="rm_closeWrite()">취소</button>
       <button class="write-submit" onclick="rm_submitNotice()">등록</button>
@@ -2191,14 +2241,15 @@ body {
 </div>
 
 <!-- 상세보기 팝업 -->
-<div class="detail-overlay" id="detailOverlay">
+<div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)rm_closeDetail();">
   <div class="detail-sheet">
     <div class="detail-head">
       <span class="pin-icon" id="detailPin" style="display:none;">📌</span>
       <span class="detail-author" id="detailAuthor"></span>
       <span class="detail-time" id="detailTime"></span>
-      <button class="detail-close" onclick="rm_closeDetail()">✕</button>
+      <button class="detail-close" onclick="rm_closeDetail()" style="padding:10px 14px;margin:-10px -10px -10px 0;">✕</button>
     </div>
+    <div class="ad-banner" id="ad-room-detail" style="border-radius:0;flex-shrink:0;margin:0;">광고 영역</div>
     <div class="detail-body" id="detailBody"></div>
   </div>
 </div>
@@ -2212,20 +2263,27 @@ body {
   </div>
   <div class="scroll">
 
-    <!-- 계정 -->
-    <div class="sec-lbl">계정</div>
-    <div class="set-row" onclick="st_openAcctInfoPopup()" style="cursor:pointer;">
-      <div class="set-left">
-        <span class="set-title" id="userName">이기석</span>
-        <span class="set-desc" id="userDesc">010-7619-4645 · 팀장 · 용인 성전사</span>
+    <!-- 프로필 카드 -->
+    <div class="set-profile-card" onclick="st_openLogin()" style="cursor:pointer;">
+      <div class="set-profile-avatar">이</div>
+      <div class="set-profile-info">
+        <span class="set-profile-name" id="userName">이기석</span>
+        <span class="set-profile-desc" id="userDesc">팀장 · 용인 성전사</span>
       </div>
-      <span class="set-arrow">›</span>
+      <span class="set-arrow" style="color:var(--coral);">›</span>
     </div>
 
     <div class="set-gap"></div>
 
-    <!-- 내 계좌 -->
-    <div class="sec-lbl">내 계좌</div>
+    <!-- 내 정보 -->
+    <div class="sec-lbl">내 정보</div>
+    <div class="set-row" onclick="st_openAcctInfoPopup()" style="cursor:pointer;">
+      <div class="set-left">
+        <span class="set-title">계정</span>
+        <span class="set-desc">010-7619-4645 · 팀장</span>
+      </div>
+      <span class="set-arrow">›</span>
+    </div>
     <div class="set-row" onclick="st_openAcctPopup()" style="cursor:pointer;">
       <div class="set-left">
         <span class="set-title">내 계좌 정보</span>
@@ -2314,8 +2372,8 @@ body {
 
     <div class="set-gap"></div>
 
-    <!-- 일괄변경 -->
-    <div class="sec-lbl">일괄변경 방법</div>
+    <!-- 도움말 -->
+    <div class="sec-lbl">도움말</div>
     <div class="set-row" style="cursor:default;">
       <div class="set-left" style="gap:6px;">
         <span class="set-title">공수 · 단가 한번에 바꾸기</span>
@@ -2324,16 +2382,22 @@ body {
         <span class="set-desc">고른 날짜에 공수나 단가를 한 번에 적용!</span>
       </div>
     </div>
+    <div class="set-row" onclick="st_openSettingsInquiry()" style="cursor:pointer;">
+      <div class="set-left">
+        <span class="set-title">오류·수정 제보 및 문의하기</span>
+        <span class="set-desc">제작자에게 직접 전달됩니다</span>
+      </div>
+      <span class="set-arrow">›</span>
+    </div>
 
     <div class="set-gap"></div>
 
-    <!-- 기타 -->
-    <div class="sec-lbl">기타</div>
+    <!-- 계정 관리 -->
+    <div class="sec-lbl">계정 관리</div>
     <div class="set-row">
       <div class="set-left"><span class="set-title">데이터 백업/복구</span></div>
       <span class="set-arrow">›</span>
     </div>
-
     <div class="set-row">
       <div class="set-left"><span class="set-title logout">로그아웃</span></div>
       <span class="set-arrow logout">›</span>
@@ -2343,17 +2407,6 @@ body {
       <span class="set-arrow" style="color:#888;">›</span>
     </div>
 
-    <div class="set-gap"></div>
-
-    <!-- 문의하기 -->
-    <div class="sec-lbl">문의하기</div>
-    <div class="set-row" onclick="st_openSettingsInquiry()" style="cursor:pointer;">
-      <div class="set-left">
-        <span class="set-title">오류·수정 제보 및 문의하기</span>
-        <span class="set-desc">제작자에게 직접 전달됩니다</span>
-      </div>
-      <span class="set-arrow">›</span>
-    </div>
     <div style="height:8px;"></div>
   </div>
 
@@ -2558,11 +2611,11 @@ body {
 
 <!-- 하단 탭바 (phone 밖 최상위) -->
 <div class="bottom-nav">
-  <div class="nav-item"><span class="nav-icon on">📅</span><span class="nav-lbl on">업무</span></div>
-  <div class="nav-item"><span class="nav-icon">💰</span><span class="nav-lbl">수익</span></div>
-  <div class="nav-item"><span class="nav-icon">👥</span><span class="nav-lbl">팀</span></div>
-  <div class="nav-item"><span class="nav-icon">📢</span><span class="nav-lbl">팀방</span></div>
-  <div class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-lbl">설정</span></div>
+  <div class="nav-item"><span class="nav-icon on" style="color:var(--coral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17"/><path d="M8 3v4"/><path d="M16 3v4"/><path d="M8.5 14.5l2.2 2.2 4.3-4.3"/></svg></span><span class="nav-lbl on">업무</span></div>
+  <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8 8.5l1.5 6.5L12 10l2.5 5L16 8.5"/><path d="M7.5 11h9"/><path d="M7.5 13.2h9"/></svg></span><span class="nav-lbl">수익</span></div>
+  <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="8" r="3"/><path d="M4 19c0-3.3 2.5-5.6 5.5-5.6S15 15.7 15 19"/><path d="M16 5.4a3 0 0 1 0 5.2"/><path d="M17.6 13.7c1.9.5 3 2.6 3 5.3"/></svg></span><span class="nav-lbl">팀</span></div>
+  <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l15-5v13L4 14z"/><path d="M8 15v1.6a2.5 0 0 0 4.9.8"/><path d="M4 11v3"/></svg></span><span class="nav-lbl">팀방</span></div>
+  <div class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.3"/><path d="M12 3.8v2.2"/><path d="M12 18v2.2"/><path d="M3.8 12h2.2"/><path d="M18 12h2.2"/><path d="M6.2 6.2l1.56 1.56"/><path d="M16.24 16.24l1.56 1.56"/><path d="M6.2 17.8l1.56-1.56"/><path d="M16.24 7.76l1.56-1.56"/></svg></span><span class="nav-lbl">설정</span></div>
 </div>
 
 <script>
@@ -3003,6 +3056,7 @@ function buildCard(i) {
           ${showDel ? `<button class="del-btn" onclick="wkj_delWork(${i})">작업삭제</button>` : ''}
         </div>
         <textarea class="wta" id="con${i}" oninput="grow(this);sv(${i})" placeholder="입력">${works[i].content}</textarea>
+        <div class="ad-banner" style="margin:6px 0 0;">광고 영역</div>
       </div>
     </div>`;
 }
@@ -3739,8 +3793,8 @@ function tm_bulkChange(dir) {
   bulkIdx = Math.max(0, Math.min(steps.length-1, bulkIdx + dir));
   _gid('bulkVal').textContent = steps[bulkIdx].toFixed(1);
   members.forEach((m, i) => {
-    if (m.status !== 'hyu') {
-      members[i].gs = bulkIdx;
+    if (m.status === 'out') { // 출근자만 적용
+      members[i].gs = steps[bulkIdx];
       const el = _gid('gv'+i);
       if (el) el.textContent = steps[bulkIdx].toFixed(1);
     }
@@ -3748,9 +3802,26 @@ function tm_bulkChange(dir) {
 }
 
 function tm_changeGs(i, dir) {
-  members[i].gs = Math.max(0, Math.min(steps.length-1, members[i].gs + dir));
+  var cur = members[i].gs || 0;
+  var idx = steps.indexOf(Math.round(cur*10)/10);
+  if (idx < 0) idx = 2;
+  idx = Math.max(0, Math.min(steps.length-1, idx + dir));
+  var newGs = steps[idx];
+  members[i].gs = newGs;
+  // 공수 0 → 자동 휴무만 적용 (나머지는 버튼으로 직접 선택)
+  if (newGs === 0) {
+    members[i].status = 'hyu';
+    var card = _gid('ac'+i);
+    if (card) {
+      card.querySelectorAll('.att-btn').forEach(function(b){
+        b.className=b.className.replace(/s-out|s-half|s-hyu/g,'').trim();
+      });
+      var hyuBtn = card.querySelector('[data-s="hyu"]');
+      if (hyuBtn) hyuBtn.classList.add('s-hyu');
+    }
+  }
   const el = _gid('gv'+i);
-  if (el) el.textContent = steps[members[i].gs].toFixed(1);
+  if (el) el.textContent = newGs === 0 ? '0' : newGs.toFixed(1);
 }
 
 function tm_setStatus(i, st) {
@@ -3758,7 +3829,7 @@ function tm_setStatus(i, st) {
   if (st === 'hyu' || st === 'abs') {
     members[i].gs = 0;
     const el = _gid('gv'+i);
-    if (el) el.textContent = '0.0';
+    if (el) el.textContent = '0';
   } else if (st === 'half') {
     members[i].gs = 0.5;
     const el = _gid('gv'+i);
@@ -3809,6 +3880,10 @@ function tm_attFilter(type) {
 }
 
 function tm_goAtt(type) {
+  var now=new Date();
+  var days=['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+  var sub=(now.getMonth()+1)+'월 '+now.getDate()+'일 '+days[now.getDay()];
+  var el=_gid('attDateSub'); if(el) el.textContent=sub;
   const tm = { all:'전체 출석체크', out:'출근 확인', half:'조퇴 확인', hyu:'휴무 확인', none:'미체크 확인' };
   _gid('attTitle').textContent = tm[type];
   tm_attFilter(type);
@@ -4026,7 +4101,21 @@ window.addEventListener('load', function(){
     if (e.target === this) tm_closeAddContact();
   });
 });
-window.tm_attFilter=tm_attFilter;window.tm_bulkChange=tm_bulkChange;window.tm_changeGs=tm_changeGs;window.tm_closeAddContact=tm_closeAddContact;window.tm_closeAlerts=tm_closeAlerts;window.tm_closeAtt=tm_closeAtt;window.tm_closeDetail=tm_closeDetail;window.tm_goAtt=tm_goAtt;window.tm_goToMemberAtt=tm_goToMemberAtt;window.tm_handleObjAccept=tm_handleObjAccept;window.tm_handleObjDeny=tm_handleObjDeny;window.tm_openAddContact=tm_openAddContact;window.tm_openAlerts=tm_openAlerts;window.tm_openMemberDetail=tm_openMemberDetail;window.tm_renderList=tm_renderList;window.tm_renderSiteContacts=tm_renderSiteContacts;window.tm_saveContact=tm_saveContact;window.tm_saveField=tm_saveField;window.tm_scrollToInput=tm_scrollToInput;window.tm_selectRole=tm_selectRole;window.tm_sendOutputConfirm=tm_sendOutputConfirm;window.tm_setStatus=tm_setStatus;window.tm_setSukso=tm_setSukso;window.tm_setSuksoUI=tm_setSuksoUI;window.tm_showConfirm=tm_showConfirm;window.tm_showToast=tm_showToast;window.tm_updateConfirmRatio=tm_updateConfirmRatio;
+function tm_allOut(){
+  members.forEach(function(m,i){
+    members[i].status='out';
+    if(!members[i].gs || members[i].gs===0) members[i].gs=1.0;
+    var card=_gid('ac'+i);
+    if(card){
+      card.querySelectorAll('.att-btn').forEach(function(b){b.className=b.className.replace(/s-out|s-half|s-hyu/g,'').trim();});
+      var outBtn=card.querySelector('[data-s="out"]');
+      if(outBtn) outBtn.classList.add('s-out');
+      var el=_gid('gv'+i);
+      if(el) el.textContent=members[i].gs.toFixed(1);
+    }
+  });
+}
+window.tm_allOut=tm_allOut;window.tm_attFilter=tm_attFilter;window.tm_bulkChange=tm_bulkChange;window.tm_changeGs=tm_changeGs;window.tm_closeAddContact=tm_closeAddContact;window.tm_closeAlerts=tm_closeAlerts;window.tm_closeAtt=tm_closeAtt;window.tm_closeDetail=tm_closeDetail;window.tm_goAtt=tm_goAtt;window.tm_goToMemberAtt=tm_goToMemberAtt;window.tm_handleObjAccept=tm_handleObjAccept;window.tm_handleObjDeny=tm_handleObjDeny;window.tm_openAddContact=tm_openAddContact;window.tm_openAlerts=tm_openAlerts;window.tm_openMemberDetail=tm_openMemberDetail;window.tm_renderList=tm_renderList;window.tm_renderSiteContacts=tm_renderSiteContacts;window.tm_saveContact=tm_saveContact;window.tm_saveField=tm_saveField;window.tm_scrollToInput=tm_scrollToInput;window.tm_selectRole=tm_selectRole;window.tm_sendOutputConfirm=tm_sendOutputConfirm;window.tm_setStatus=tm_setStatus;window.tm_setSukso=tm_setSukso;window.tm_setSuksoUI=tm_setSuksoUI;window.tm_showConfirm=tm_showConfirm;window.tm_showToast=tm_showToast;window.tm_updateConfirmRatio=tm_updateConfirmRatio;
 })();
 </script>
 <script>
@@ -4146,6 +4235,14 @@ rm_render();
 window.rm_closeDetail=rm_closeDetail;window.rm_closeWrite=rm_closeWrite;window.rm_deleteNotice=rm_deleteNotice;window.rm_openDetail=rm_openDetail;window.rm_openWrite=rm_openWrite;window.rm_render=rm_render;window.rm_submitNotice=rm_submitNotice;window.rm_toggleConfirm=rm_toggleConfirm;window.rm_toggleMenu=rm_toggleMenu;
 })();
 </script>
+
+<script>
+/* ===== 로그인 글루 ===== */
+function st_openLogin(){ document.getElementById('loginOverlay').classList.add('on'); }
+function st_closeLogin(){ document.getElementById('loginOverlay').classList.remove('on'); }
+function st_loginKakao(){ alert('카카오 로그인 — Firebase 연동 후 활성화됩니다'); }
+function st_loginGoogle(){ alert('구글 로그인 — Firebase 연동 후 활성화됩니다'); }
+</script>
 <script>
 /* ===== 라우터 (탭 index 순서 = 패널 순서) ===== */
 (function(){
@@ -4159,6 +4256,7 @@ window.rm_closeDetail=rm_closeDetail;window.rm_closeWrite=rm_closeWrite;window.r
     panels.forEach(function(p, idx){ p.classList.toggle('active', idx === i); });
     navItems.forEach(function(n, idx){
       n.querySelector('.nav-icon').classList.toggle('on', idx === i);
+      n.querySelector('.nav-icon').style.color = idx === i ? 'var(--coral)' : '#555555';
       n.querySelector('.nav-lbl').classList.toggle('on', idx === i);
     });
   }
@@ -4168,5 +4266,21 @@ window.rm_closeDetail=rm_closeDetail;window.rm_closeWrite=rm_closeWrite;window.r
   });
 })();
 </script>
+
+<!-- 로그인 팝업 -->
+<div class="login-overlay" id="loginOverlay" onclick="if(event.target===this)st_closeLogin();">
+  <div class="login-sheet">
+    <div class="login-logo">공수계산</div>
+    <div class="login-sub">팀 관리·급여 정산·업무일지<br>로그인하면 팀 기능을 사용할 수 있습니다</div>
+    <button class="login-btn login-btn-kakao" onclick="st_loginKakao()">
+      <span style="font-size:20px;">💬</span> 카카오로 시작하기
+    </button>
+    <button class="login-btn login-btn-google" onclick="st_loginGoogle()">
+      <span style="font-size:18px;">G</span> 구글로 시작하기
+    </button>
+    <div class="login-divider">로그인 없이 개인 기록만 사용 가능</div>
+    <button class="login-close" onclick="st_closeLogin()">닫기</button>
+  </div>
+</div>
 </body>
 </html>
