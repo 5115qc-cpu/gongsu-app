@@ -61,7 +61,7 @@ body {
 .tab-panel::-webkit-scrollbar { display: none; }
 
 /* ===== 하단 탭바 (calendar_main 원본 재사용) ===== */
-.bottom-nav { background: var(--surface); height: 56px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999; }
+.bottom-nav { background: var(--surface); height: 56px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 99999; }
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; flex: 1; }
 .nav-icon { font-size: 18px; opacity: 0.35; }
 .nav-icon.on { opacity: 1; }
@@ -2907,7 +2907,6 @@ window.prevDate=prevDate;window.nextDate=nextDate;window.changeGS=changeGS;windo
 /* ===== 날짜상세 열기/닫기 (글루) ===== */
 var currentKey = null;
 function openDateDetail(k){
-  document.querySelector(".bottom-nav").style.display="none";
   currentKey = k;
   var p=k.split("-"); var dt=new Date(+p[0],+p[1]-1,+p[2]);
   var wd=["일","월","화","수","목","금","토"][dt.getDay()];
