@@ -188,6 +188,7 @@ body {
 #ddOverlay .sec-lbl-sub { color: var(--txt3); font-size:13px; font-weight: 400; margin-left: 4px; }
 #ddOverlay .gs-da-wrap { display: flex; gap: 6px; align-items: stretch; }
 #ddOverlay .confirm-vert { width: 60px; flex: 0 0 60px; align-self: stretch; background: #749AD3; color: #fff; border: none; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 4px; display: flex; align-items: center; justify-content: center; font-family: 'Noto Sans KR', sans-serif; }
+#ddOverlay .confirm-h { width: 100%; height: 48px; margin-top: 8px; background: #749AD3; color: #fff; border: none; border-radius: 12px; font-size: 17px; font-weight: 700; letter-spacing: 6px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
 #ddOverlay .row-wrap { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 #ddOverlay .ctrl-row { display: flex; align-items: stretch; gap: 6px; }
 #ddOverlay .ctrl-box {
@@ -1519,7 +1520,6 @@ body {
           <button class="side-btn coral" onclick="confirmDA()">단가확정</button>
         </div>
       </div>
-      <button class="confirm-vert" onclick="ddSave()">확인</button>
     </div>
 
     <!-- 메모 -->
@@ -1527,6 +1527,8 @@ body {
     <textarea class="memo-ta" id="memoTa"
       oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
       placeholder="현장명 또는 메모">삼성바이오 B동 현장</textarea>
+
+    <button class="confirm-h" onclick="ddSave()">공수 단가 메모 일괄 저장</button>
 
     <!-- 업무일지 -->
     <div class="j-head">
@@ -2728,9 +2730,8 @@ function renderCalendar(){
       if(showDanga && data.danga && data.type!=='hyu'){
         badge+='<div class="badge-danga" style="font-size:11px;color:var(--txt3);text-align:center;">'+Math.floor(data.danga/10000)+'만</div>';
       }
-      if(data.memo && data.type!=='hyu'){
-        var memoPreview=data.memo.length>6?data.memo.slice(0,6)+'…':data.memo;
-        badge+='<div style="font-size:10px;color:var(--txt3);text-align:center;line-height:1.2;margin-top:1px;">'+memoPreview+'</div>';
+      if(data.memo){
+        badge+='<div style="font-size:10px;color:var(--txt3);text-align:center;line-height:1.2;margin-top:1px;">'+data.memo+'</div>';
       }
     }
     grid.innerHTML += '<div class="cal-day'+(isToday?' today':'')+sel+'" data-key="'+k+'" data-d="'+d+'" ontouchstart="onTouchStart(this)" ontouchend="onTouchEnd(this)" ontouchmove="onTouchMove()" onclick="onDayClick(this)">'+
@@ -2911,11 +2912,11 @@ document.getElementById('pageDate').textContent =
   today.getFullYear() + '년 ' + (today.getMonth()+1) + '월 ' + today.getDate() + '일 (' + days[today.getDay()] + ')';
 
 const dateKeys = [];
-for (var i = -2; i <= 2; i++) {
+for (var i = -7; i <= 0; i++) {
   var d = new Date(today); d.setDate(today.getDate() + i);
   dateKeys.push((d.getMonth()+1) + '월 ' + d.getDate() + '일 (' + days[d.getDay()] + ')');
 }
-var idx = 2;
+var idx = dateKeys.length - 1;
 function updateNav() { document.getElementById('jNavTxt').textContent = dateKeys[idx] + ' 일지'; }
 function prevDate() { if (idx > 0) { idx--; updateNav(); } }
 function nextDate() { if (idx < dateKeys.length-1) { idx++; updateNav(); } }
@@ -3043,7 +3044,9 @@ function toggleJournalTip(){ var t=document.getElementById("journalTip"); t.styl
 function ddSave(){
   if(!currentKey) { closeDateDetail(); return; }
   if(isHyu){
-    dayData[currentKey]={ type:'hyu' };
+    var memoElH=document.getElementById('memoTa');
+    var memoH=memoElH?memoElH.value.trim():'';
+    dayData[currentKey]={ type:'hyu', memo:memoH };
   } else {
     var gs=gsVals[gsIdx]||1;
     var memoEl=document.getElementById('memoTa');
@@ -3203,7 +3206,7 @@ window.wkj_addWork=wkj_addWork;window.wkj_chPpl=wkj_chPpl;window.wkj_delWork=wkj
 <script>
 /* ===== 업무일지 열기/닫기 ===== */
 window.fixedCardH = 0;
-function openJournal(){var t=document.getElementById("pageDate"),p=document.getElementById("pDate");if(t&&p)p.textContent=t.textContent;try{var saved=JSON.parse(localStorage.getItem("journals")||"{}");if(currentKey&&saved[currentKey]) works=saved[currentKey];}catch(e){}document.getElementById("pjOverlay").classList.add("on");requestAnimationFrame(function(){requestAnimationFrame(function(){ window.fixedCardH=0; setTimeout(function(){ window.fixedCardH=window.getCardH ? window.getCardH() : 300; render(); },50); });});}
+function openJournal(){var t=document.getElementById("pageDate"),p=document.getElementById("pDate");if(t&&p)p.textContent=t.textContent;try{var saved=JSON.parse(localStorage.getItem("journals")||"{}");if(currentKey&&saved[currentKey]) works=saved[currentKey]; else works=[];}catch(e){}document.getElementById("pjOverlay").classList.add("on");requestAnimationFrame(function(){requestAnimationFrame(function(){ window.fixedCardH=0; setTimeout(function(){ window.fixedCardH=window.getCardH ? window.getCardH() : 300; render(); },50); });});}
 function closeJournal(){document.getElementById("pjOverlay").classList.remove("on");}
 </script>
 <script>
