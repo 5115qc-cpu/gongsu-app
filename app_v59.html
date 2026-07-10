@@ -307,7 +307,7 @@ body {
 /* 바디 */
 #pjOverlay .p-body {
   flex: 1; display: flex; flex-direction: column;
-  padding: 5px 5px 72px; overflow-y: auto; gap: 6px;
+  padding: 5px 5px 8px; overflow-y: auto; gap: 6px;
   scrollbar-width: none; -ms-overflow-style: none;
 }
 #pjOverlay .p-body::-webkit-scrollbar { display: none; }
@@ -324,6 +324,7 @@ body {
   background: var(--card); border: 0.5px solid var(--border);
   border-radius: 10px;
 }
+#pjOverlay .half-wrap { display:flex; flex-direction:column; }
 /* 행 */
 #pjOverlay .wrow {
   display: flex; align-items: center;
@@ -392,6 +393,7 @@ body {
   border-radius: 9px; color: var(--coral);
   font-size: var(--pj-body); font-weight: 700; cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 56px;
 }
 
 /* ===== 설정탭(settings) ===== */
@@ -1248,7 +1250,7 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-#pjOverlay .con-ta { width:100%; min-height:80px; background:var(--card); border:none; border-top:0.5px solid var(--border); outline:none; color:var(--txt2); font-size:var(--pj-body); padding:8px; resize:none; line-height:1.5; font-family:'Noto Sans KR',sans-serif; display:block; }
+#pjOverlay .con-ta { width:100%; flex:1; background:var(--card); border:none; border-top:0.5px solid var(--border); outline:none; color:var(--txt2); font-size:var(--pj-body); padding:8px; resize:none; line-height:1.5; font-family:'Noto Sans KR',sans-serif; display:block; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -3097,7 +3099,7 @@ function buildCard(i) {
       </div>
       <div class="wrow">
         <span class="wlbl">작업내용</span>
-        <div style="flex:1;"></div>
+        <span style="flex:1;text-align:center;color:var(--txt3);font-size:15px;font-weight:700;">${i+1}번</span>
         ${showDel ? `<button class="del-btn" onclick="wkj_delWork(${i})">작업삭제</button>` : ''}
       </div>
       <textarea class="wta con-ta" id="con${i}" oninput="sv(${i})" placeholder="내용을 작성해주세요">${works[i].content}</textarea>
@@ -3117,11 +3119,12 @@ function getCardH() {
 function render() {
   const area = document.getElementById('workArea');
   area.innerHTML = '';
-  const h = getCardH();
+  const h = window.fixedCardH || 300;
   works.forEach((_, i) => {
     const wrap = document.createElement('div');
     wrap.className = 'half-wrap';
-    wrap.style.height = (works.length === 1 ? (h * 2 + 6) + 'px' : h + 'px');
+    wrap.style.height = (h * 2 + 6) + 'px';
+    wrap.style.flexShrink = '0';
     wrap.innerHTML = buildCard(i);
     area.appendChild(wrap);
   });
@@ -3194,12 +3197,13 @@ function wkj_save(){
   }catch(e){}
   closeJournal();
 }
-window.wkj_addWork=wkj_addWork;window.wkj_chPpl=wkj_chPpl;window.wkj_delWork=wkj_delWork;window.render=render;
+window.wkj_addWork=wkj_addWork;window.wkj_chPpl=wkj_chPpl;window.wkj_delWork=wkj_delWork;window.render=render;window.getCardH=getCardH;
 })();
 </script>
 <script>
 /* ===== 업무일지 열기/닫기 ===== */
-function openJournal(){var t=document.getElementById("pageDate"),p=document.getElementById("pDate");if(t&&p)p.textContent=t.textContent;try{var saved=JSON.parse(localStorage.getItem("journals")||"{}");if(currentKey&&saved[currentKey]) works=saved[currentKey];}catch(e){}document.getElementById("pjOverlay").classList.add("on");requestAnimationFrame(function(){requestAnimationFrame(render);});}
+window.fixedCardH = 0;
+function openJournal(){var t=document.getElementById("pageDate"),p=document.getElementById("pDate");if(t&&p)p.textContent=t.textContent;try{var saved=JSON.parse(localStorage.getItem("journals")||"{}");if(currentKey&&saved[currentKey]) works=saved[currentKey];}catch(e){}document.getElementById("pjOverlay").classList.add("on");requestAnimationFrame(function(){requestAnimationFrame(function(){ window.fixedCardH=0; setTimeout(function(){ window.fixedCardH=window.getCardH ? window.getCardH() : 300; render(); },50); });});}
 function closeJournal(){document.getElementById("pjOverlay").classList.remove("on");}
 </script>
 <script>
