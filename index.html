@@ -2807,7 +2807,10 @@ function selectPay(n){
 
 function updateSum(){
   var totalGs=0; var attendDays=0; var albaDays=0; var albaGross=0; var albaGs=0;
-  Object.values(dayData).forEach(function(d){ 
+  Object.keys(dayData).forEach(function(k){
+    var p = k.split('-');
+    if(parseInt(p[0],10)!==curYear || parseInt(p[1],10)!==(curMonth+1)) return;
+    var d = dayData[k];
     if(d.type==='out'){ 
       if(d.isAlba){ 
         albaDays++; 
