@@ -164,6 +164,8 @@ body {
 #tab-work .popup-lbl { color: var(--txt2); font-size:15px; }
 #tab-work .popup-ctrl { display: flex; align-items: center; gap: 8px; }
 #tab-work .popup-btn { background: var(--card); border: 0.5px solid var(--border); color: var(--coral); font-size: 16px; font-weight: 700; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+#tab-work .bulk-hyu-btn { background: var(--card); border: 0.5px solid var(--border); color: var(--txt2); font-size: 14px; font-weight: 700; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+#tab-work .bulk-hyu-btn.active { background: var(--coral); color: #fff; border-color: var(--coral); }
 #tab-work .popup-val { color: var(--txt1); font-size: 14px; font-weight: 700; min-width: 60px; text-align: center; }
 #tab-work .popup-confirm { width: 100%; height: 46px; background: var(--coral); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
 #tab-work .popup-close-btn { position: absolute; top: 16px; right: 20px; background: none; border: none; color: var(--txt3); font-size: 20px; cursor: pointer; }
@@ -1457,7 +1459,10 @@ body {
     <div class="popup-title">선택 일괄편집</div>
     <div class="popup-sub" id="bulkSub">선택된 날짜에 일괄 적용됩니다</div>
     <div class="popup-row">
-      <span class="popup-lbl">공수</span>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="popup-lbl">공수</span>
+        <button class="bulk-hyu-btn" id="bulkHyuBtn" onclick="toggleBulkHyu()">휴무</button>
+      </div>
       <div class="popup-ctrl">
         <button class="popup-btn" onclick="changeBS(-1)">－</button>
         <span class="popup-val" id="bsVal">1.0 공수</span>
@@ -2868,13 +2873,26 @@ function openBulk(){
   document.getElementById('bulkSub').textContent = n>0 ? n+'일 선택 · 일괄 적용됩니다' : '날짜를 먼저 선택해주세요 (꾹 누르기)';
   isBulkHyu = false; bsIdx = 1;
   document.getElementById('bsVal').textContent = gsSteps[bsIdx].toFixed(1)+' 공수';
+  var bhb=document.getElementById('bulkHyuBtn'); if(bhb) bhb.classList.remove('active');
   document.getElementById('bulkPopup').classList.add('on');
 }
 function closeBulk(){ document.getElementById('bulkPopup').classList.remove('on'); }
 var isBulkHyu = false;
+function toggleBulkHyu(){
+  isBulkHyu = !isBulkHyu;
+  var btn = document.getElementById('bulkHyuBtn');
+  if(isBulkHyu){
+    btn.classList.add('active');
+    document.getElementById('bsVal').textContent = '휴무';
+  } else {
+    btn.classList.remove('active');
+    bsIdx = 1;
+    document.getElementById('bsVal').textContent = gsSteps[bsIdx].toFixed(1)+' 공수';
+  }
+}
 function changeBS(d){
-  if(isBulkHyu && d>0){ isBulkHyu=false; bsIdx=0; document.getElementById('bsVal').textContent=gsSteps[bsIdx].toFixed(1)+' 공수'; return; }
-  if(!isBulkHyu && d<0 && bsIdx===0){ isBulkHyu=true; document.getElementById('bsVal').textContent='휴무'; return; }
+  if(isBulkHyu && d>0){ isBulkHyu=false; document.getElementById('bulkHyuBtn').classList.remove('active'); bsIdx=0; document.getElementById('bsVal').textContent=gsSteps[bsIdx].toFixed(1)+' 공수'; return; }
+  if(!isBulkHyu && d<0 && bsIdx===0){ isBulkHyu=true; document.getElementById('bulkHyuBtn').classList.add('active'); document.getElementById('bsVal').textContent='휴무'; return; }
   bsIdx=Math.max(0,Math.min(gsSteps.length-1,bsIdx+d));
   document.getElementById('bsVal').textContent=gsSteps[bsIdx].toFixed(1)+' 공수';
 }
