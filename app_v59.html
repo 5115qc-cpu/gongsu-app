@@ -20,8 +20,8 @@
   --txt3:    #888888;
   --sun:     #D47A7A;
   --sat:     #7A9CD4;
-  --pj-lbl:  13px;
-  --pj-body: 15px;
+  --pj-lbl:  15px;
+  --pj-body: 17px;
   --btnbg:   #2A1810;
   --row-h:   44px;
   --btn-h:   52px;
@@ -346,7 +346,7 @@ body {
 }
 #pjOverlay .ppl-btn {
   background: var(--btnbg); color: var(--coral);
-  border: none; font-size: 17px; font-weight: 700;
+  border: none; font-size: 19px; font-weight: 700;
   padding: 0 6px; cursor: pointer; align-self: stretch;
   display: flex; align-items: center;
 }
@@ -380,7 +380,7 @@ body {
   width: 72px; height: 36px;
   background: #3A1A1A; border: 1.5px solid #CC6666;
   border-radius: 8px; color: #CC6666;
-  font-size: 14px; font-weight: 700; cursor: pointer;
+  font-size: 16px; font-weight: 700; cursor: pointer;
   flex-shrink: 0; display: flex;
   align-items: center; justify-content: center;
   font-family: 'Noto Sans KR', sans-serif;
@@ -1242,7 +1242,7 @@ body {
   width: 72px; height: 36px;
   background: #1A3A1A; border: 1.5px solid #4CAF50;
   border-radius: 8px; color: #4CAF50;
-  font-size: 14px; font-weight: 700; cursor: pointer;
+  font-size: 16px; font-weight: 700; cursor: pointer;
   flex-shrink: 0; display: flex;
   align-items: center; justify-content: center;
   font-family: 'Noto Sans KR', sans-serif;
@@ -3093,14 +3093,14 @@ function buildCard(i) {
       </div>
       <div class="wrow">
         <span class="wlbl">작업위치</span>
-        <textarea class="wta" id="loc${i}" oninput="grow(this);sv(${i})" placeholder="작업위치를 입력해주세요">${works[i].loc}</textarea>
+        <textarea class="wta" id="loc${i}" oninput="grow(this);sv(${i})" placeholder="위치를 입력해주세요">${works[i].loc}</textarea>
       </div>
       <div class="wrow">
         <span class="wlbl">작업내용</span>
         <div style="flex:1;"></div>
         ${showDel ? `<button class="del-btn" onclick="wkj_delWork(${i})">작업삭제</button>` : ''}
       </div>
-      <textarea class="wta con-ta" id="con${i}" oninput="sv(${i})" placeholder="작업내용을 작성해주세요">${works[i].content}</textarea>
+      <textarea class="wta con-ta" id="con${i}" oninput="sv(${i})" placeholder="내용을 작성해주세요">${works[i].content}</textarea>
     </div>`;
 }
 
