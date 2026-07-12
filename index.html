@@ -2993,6 +2993,10 @@ function updateSum(){
   if(document.getElementById('gs-label0')) document.getElementById('gs-label0').textContent = gsLbl;
   if(document.getElementById('gs-label1')) document.getElementById('gs-label1').textContent = gsLbl;
   document.getElementById('sumSub').innerHTML = '<strong>'+totalGs.toFixed(1)+'</strong>공수 · '+(payMode===0?(tax0===0?'3.3%':'4대보험'):(tax1===0?'3.3%':'4대보험'))+' · '+(payMode===0?'팀장정산':'일반급여');
+
+  // 캘린더 실제 계산값을 수익 리포트로 전달
+  window.RVCALC = { totalGs:totalGs, attendDays:attendDays, realGross:realGross, albaGs:albaGs, albaGross:albaGross, albaNet:albaNet, ilbiTotal:ilbiTotal, ilbiNet:ilbiNet };
+  if(window.rvm_updateAll) window.rvm_updateAll();
 }
 
 // 일괄편집 팝업
@@ -3925,16 +3929,23 @@ function rvm_commitVal(el,type){
 }
 
 function rvm_updateAll(){
+  // 캘린더 실제 계산값 사용 (더미 대신)
+  var C = window.RVCALC || {};
+  var totalGs    = (C.totalGs != null) ? C.totalGs : 0;
+  var attendDays = (C.attendDays != null) ? C.attendDays : 0;
+  var albaGs     = (C.albaGs != null) ? C.albaGs : 0;
+  var albaNet    = (C.albaNet != null) ? C.albaNet : 0;
+  var realGross  = (C.realGross != null) ? C.realGross : 0;
   // 일비 = 출근일수 × 일비단가 (공수 무관, 3.3% 공제)
   var ilbiTotal = attendDays * ilbiDay;
   var ilbiNet   = ilbiTotal - Math.floor(ilbiTotal * 0.033);
   // 알바: 3.3% 공제 후 순수령
   var albaNet2  = Math.floor(albaGs > 0 ? albaNet : 0);
 
-  // 팀장정산식
+  // 팀장정산식 (캘린더 단가 기준)
   var r0     = TAX[tax0];
-  var inAmt  = Math.floor(fullDanga * totalGs * (1-r0));  // 통장 입금
-  var payAmt = Math.floor(myDanga   * totalGs * (1-r0));  // 내 실수령(급여)
+  var inAmt  = Math.floor(fullDanga * totalGs * (1-r0));  // 통장 입금(풀단가)
+  var payAmt = Math.floor(realGross * (1-r0));            // 내 실수령(캘린더 단가)
   var sendAmt = inAmt - payAmt;                            // 팀장 송금액
   var net0   = payAmt + ilbiTotal + (albaGs>0?albaNet2:0);
   _gid('c0-in').textContent    = rvm_fmt(inAmt);
@@ -3946,10 +3957,10 @@ function rvm_updateAll(){
   _gid('albaRow0').style.display = albaGs>0?'flex':'none';
   if(albaGs>0){ _gid('c0-albags').textContent=albaGs%1===0?albaGs.toFixed(0):albaGs.toFixed(1); _gid('c0-albanet').textContent=rvm_fmt(albaNet2); }
 
-  // 일반급여식
+  // 일반급여식 (캘린더 단가 기준)
   var r1         = TAX[tax1];
   var ilbiTotal2 = attendDays * ilbiDay2;
-  var gross1     = myDanga2 * totalGs;
+  var gross1     = realGross;                              // 캘린더 날짜별 단가 합
   var taxAmt1    = Math.floor(gross1 * r1);
   var net1       = gross1 - taxAmt1 + ilbiTotal2 + (albaGs>0?albaNet2:0);
   _gid('c1-gross').textContent   = rvm_fmt(gross1);
