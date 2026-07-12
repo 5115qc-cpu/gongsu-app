@@ -1363,14 +1363,6 @@ body {
           <input id="fullVal" value="220,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitFull(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:15px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
           <button onclick="changeFull(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
         </div>
-        <!-- 내 단가 -->
-        <div style="display:flex;align-items:center;border-bottom:0.5px solid var(--border);height:44px;">
-          <span style="color:var(--txt3);font-size:14px;width:70px;text-align:center;flex-shrink:0;">내 단가</span>
-          <div style="width:0.5px;height:100%;background:var(--border);"></div>
-          <button onclick="changeMyD(-1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">－</button>
-          <input id="myDVal" value="180,000원" inputmode="numeric" pattern="[0-9]*" onfocus="editFocus(this)" onblur="commitMyD(this)" onkeydown="if(event.key==='Enter')this.blur();" style="flex:1;text-align:center;color:var(--txt1);font-size:15px;font-weight:700;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;width:100%;padding:0;height:100%;">
-          <button onclick="changeMyD(1)" style="background:var(--btnbg,#2A1810);color:var(--coral);border:none;font-size:16px;font-weight:700;padding:0 12px;height:100%;cursor:pointer;">＋</button>
-        </div>
         <!-- 결과 -->
         <div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;">
           <div style="display:flex;justify-content:space-between;">
@@ -2870,7 +2862,7 @@ function selectPay(n){
 }
 
 function updateSum(){
-  var totalGs=0; var attendDays=0; var albaDays=0; var albaGross=0; var albaGs=0;
+  var totalGs=0; var attendDays=0; var albaDays=0; var albaGross=0; var albaGs=0; var realGross=0;
   Object.keys(dayData).forEach(function(k){
     var p = k.split('-');
     if(parseInt(p[0],10)!==curYear || parseInt(p[1],10)!==(curMonth+1)) return;
@@ -2883,6 +2875,7 @@ function updateSum(){
       } else {
         totalGs+=d.gs; 
         attendDays++; 
+        realGross += (d.danga||0) * d.gs;
       }
     } 
   });
@@ -2896,7 +2889,7 @@ function updateSum(){
   // 팀장정산식
   var r0 = TAX[tax0];
   var inAmt  = Math.floor(fullDanga * totalGs * (1-r0));
-  var netAmt = Math.floor(myDanga  * totalGs * (1-r0));
+  var netAmt = Math.floor(realGross * (1-r0));
   var sendAmt = inAmt - netAmt;
   var netAmtTotal = netAmt + ilbiNet;
   document.getElementById('c0-in').textContent   = inAmt.toLocaleString()+'원';
@@ -2912,7 +2905,7 @@ function updateSum(){
 
   // 일반급여식
   var r1 = TAX[tax1];
-  var gross  = myDanga2 * totalGs;
+  var gross  = realGross;
   var taxAmt = Math.floor(gross * r1);
   var net1   = gross - taxAmt;
   var net1Total = net1 + ilbiNet;
