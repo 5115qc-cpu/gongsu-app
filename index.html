@@ -2992,6 +2992,7 @@ function applyBulk(){
     if(isBulkHyu){ dayData[k]={ type:'hyu' }; }
     else{ dayData[k]={ type:'out', gs:gsSteps[bsIdx], danga:bdVal }; }
   });
+  try{ localStorage.setItem('dayData', JSON.stringify(dayData)); }catch(e){}
   closeBulk(); exitSelect(); renderCalendar();
 }
 
