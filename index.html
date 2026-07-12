@@ -1522,7 +1522,7 @@ body {
         <div class="ctrl-row">
           <div class="ctrl-box">
             <button class="ctrl-btn" onclick="changeDA(-1)">－</button>
-            <input class="ctrl-val" id="daVal" value="200,000 원" inputmode="numeric" pattern="[0-9]*" style="background:none;border:none;outline:none;text-align:center;width:100%;font-family:'Noto Sans KR',sans-serif;cursor:text;">
+            <input class="ctrl-val" id="daVal" value="200,000 원" inputmode="numeric" pattern="[0-9]*" onfocus="daFocus(this)" onblur="daBlur(this)" onkeydown="if(event.key==='Enter')this.blur();" style="background:none;border:none;outline:none;text-align:center;width:100%;font-family:'Noto Sans KR',sans-serif;cursor:text;">
             <button class="ctrl-btn" onclick="changeDA(1)">＋</button>
           </div>
           <button class="side-btn coral" onclick="confirmDA()">단가확정</button>
@@ -3012,6 +3012,15 @@ updateNav();
 var gsVals = [0.5,1,1.5,2,2.5,3,3.5,4];
 var gsIdx = 1;
 function changeGS(d) {
+  if(isHyu){
+    if(d>0){  // 휴무(0공수)에서 + → 휴무 해제하고 1.0부터
+      isHyu=false;
+      var hb=document.getElementById('hyuBtn'); if(hb) hb.classList.remove('active');
+      gsIdx=1;
+      var gv0=document.getElementById('gsVal'); if(gv0) gv0.textContent='1.0 공수';
+    }
+    return;  // 휴무에서 -는 무시
+  }
   gsIdx = Math.max(0, Math.min(gsVals.length-1, gsIdx+d));
   var gv=document.getElementById('gsVal'); if(gv) gv.textContent = gsVals[gsIdx].toFixed(1) + ' 공수';
 }
@@ -3032,6 +3041,10 @@ function confirmDA() {
     el.value=rounded.toLocaleString()+' 원';
   }
 }
+// 단가 직접 입력 (클릭 시 숫자 키보드)
+function daFocus(el){ el.value = el.value.replace(/[^0-9]/g,''); el.select(); }
+function daBlur(el){ daVal = Math.max(0, parseInt(el.value.replace(/[^0-9]/g,''))||0); el.value = daVal.toLocaleString()+' 원'; }
+window.daFocus=daFocus; window.daBlur=daBlur;
 
 // 알바
 var isAlba = false;
