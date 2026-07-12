@@ -991,6 +991,7 @@ body.ivory #tab-team .att-ftab.f-none { color: inherit; }
 body.ivory #tab-team .bulk-label { color: var(--txt2); }
 body.ivory #tab-team .bulk-row { background: var(--surface); border-bottom-color: var(--border); }
 body.ivory #rev-leader .main-card { background: linear-gradient(135deg, #FDE8D8, #FBDCC5); border-color: var(--border); }
+body.ivory #rev-member .main-card { background: linear-gradient(135deg, #FDE8D8, #FBDCC5); border-color: var(--border); }
 body.ivory #tab-team .appbar { background: var(--surface); border-bottom-color: var(--border); }
 body.ivory #tab-team .appbar-title { color: var(--txt1); }
 body.ivory #tab-team .alert-btn { background: var(--card); border-color: var(--border); }
@@ -3624,9 +3625,9 @@ function _gid(id){return _root.querySelector('[id="'+id+'"]');}
 function _qs(s){return _root.querySelector(s);}
 function _qsa(s){return _root.querySelectorAll(s);}
 var payTab = 0, taxTab = 0;
-var sukso = 800000;
+var sukso = 0;
 var customExps = [{name:'공구비', val:300000}];
-var SELF_BASE = 5115430, MARGIN = 12025460, ILBI = 1950000;
+var SELF_BASE = 0, MARGIN = 0, ILBI = 0;
 
 var TAX_NOTES = [
   '※ 원청에서 4대보험 기준으로 지급받는 방식',
@@ -3671,7 +3672,7 @@ function rvl_toggleDetail(id){
 function rvl_buildMonthList(){
   var now = new Date();
   var html = '';
-  var mockData = [13609835,15000000,16000000,16000000,14500000,13000000,12800000,11000000,10500000,9800000,11200000,10000000];
+  var mockData = [0,0,0,0,0,0,0,0,0,0,0,0];
   for(var i=1; i<=12; i++){
     var d = new Date(now.getFullYear(), now.getMonth()-i, 1);
     var y = d.getFullYear();
@@ -3825,7 +3826,7 @@ function rvl_exportExcel(){
   var taxRate = taxTab===0 ? 0.09404 : 0.033;
   
   var now = new Date();
-  var mockData = [13609835,15000000,16000000,16000000,14500000,13000000,12800000,11000000,10500000,9800000,11200000,10000000];
+  var mockData = [0,0,0,0,0,0,0,0,0,0,0,0];
   
   var rows = [];
   rows.push(['월별 수익 현황 ('+payLabel+' / '+taxLabel+')']);
