@@ -2,6 +2,9 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>공수계산 업무일지</title>
 <link rel="manifest" href="manifest.json">
@@ -972,18 +975,18 @@ body {
 
 /* ── 섹션 헤더 ── */
 #tab-team .sec-hdr { padding: 10px 7px 5px; }
-#tab-team .sec-ttl { color: #888; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; }
+#tab-team .sec-ttl { color: var(--txt3); font-size: 15px; font-weight: 700; letter-spacing: 0.5px; }
 
 /* ── 팀원 카드 ── */
-#tab-team .member-card { margin: 0 0 4px; background: #1E1E1E; border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-#tab-team .member-card:active { background: #2A2A2A; }
+#tab-team .member-card { margin: 0 0 4px; background: var(--card); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+#tab-team .member-card:active { background: var(--surface); }
 #tab-team .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size:15px; font-weight: 700; flex-shrink: 0; }
 #tab-team .av-coral { background: #2A1810; color: #E8927C; border: 1.5px solid #E8927C; }
 #tab-team .av-blue  { background: #1A1A2A; color: #7A9CD4; border: 1.5px solid #7A9CD4; }
 #tab-team .av-green { background: #0A1A10; color: #7ECFB8; border: 1.5px solid #7ECFB8; }
 #tab-team .member-info { flex: 1; min-width: 0; }
 #tab-team .member-top { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
-#tab-team .member-name { color: #E8E8E8; font-size: 17px; font-weight: 600; }
+#tab-team .member-name { color: var(--txt1); font-size: 17px; font-weight: 600; }
 #tab-team .member-role { font-size:14px; font-weight: 700; padding: 2px 6px; border-radius: 8px; }
 #tab-team .role-sub { background: #2A1810; color: #E8927C; }
 #tab-team .role-guide { background: #1A1A2A; color: #7A9CD4; }
@@ -991,7 +994,7 @@ body {
 #tab-team .ab-out  { background: #2A1810; color: #E8927C; }
 #tab-team .ab-hyu  { background: #2A3A35; color: #7ECFB8; }
 #tab-team .ab-none { background: #1A1A2A; color: #7A9CD4; }
-#tab-team .member-sub { color: #666; font-size: 14px; }
+#tab-team .member-sub { color: var(--txt3); font-size: 14px; }
 #tab-team .call-btn { background: #0A1A10; color: #7ECFB8; font-size: 15px; border: 0.5px solid #7ECFB8; border-radius: 7px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none; flex-shrink: 0; }
 
 /* ══════════════════════
