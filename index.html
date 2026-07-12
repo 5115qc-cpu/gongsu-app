@@ -2365,21 +2365,21 @@ body {
     <div class="set-row">
       <div class="set-left">
         <span class="set-title">캘린더 단가 표시</span>
-        <span class="set-desc">날짜 칸에 금액 표시</span>
+        <span class="set-desc">캘린더의 날짜 칸에 금액 표시</span>
       </div>
       <label class="toggle-wrap"><input type="checkbox" id="showDangaToggle" onchange="st_toggleDanga(this.checked)"><span class="toggle-slider"></span></label>
     </div>
     <div class="set-row">
       <div class="set-left">
-        <span class="set-title">합계 금액 표시</span>
+        <span class="set-title">캘린더 하단의 급여 금액표시</span>
         <span class="set-desc">하단 총 수령액 표시</span>
       </div>
       <label class="toggle-wrap"><input type="checkbox" id="salaryToggle" checked onchange="st_toggleSalary(this.checked)"><span class="toggle-slider"></span></label>
     </div>
     <div class="set-row">
       <div class="set-left">
-        <span class="set-title">배경 테마</span>
-        <span class="set-desc" id="themeDesc">아이보리 모드</span>
+        <span class="set-title">배경 테마 선택</span>
+        <span class="set-desc" id="themeDesc">배경색상 변경</span>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <span style="font-size:13px;color:var(--txt3);">다크</span>
@@ -3406,7 +3406,6 @@ function st_toggleAcctPublic(checked){
 // 테마 전환
 function st_toggleTheme(isDark) {
   document.body.classList.toggle('ivory', !isDark);
-  document.getElementById('themeDesc').textContent = isDark ? '다크 모드' : '아이보리 모드';
   localStorage.setItem('theme', isDark ? 'dark' : 'ivory');
 }
 // 앱 시작 시 테마 복원
@@ -3417,7 +3416,6 @@ function st_toggleTheme(isDark) {
       var isDark = th==='dark';
       document.body.classList.toggle('ivory', !isDark);
       var tog=document.getElementById('darkToggle'); if(tog) tog.checked=isDark;
-      var desc=document.getElementById('themeDesc'); if(desc) desc.textContent=isDark?'다크 모드':'아이보리 모드';
     }
   }catch(e){}
 })();
