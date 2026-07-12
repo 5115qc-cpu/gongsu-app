@@ -1309,7 +1309,7 @@ body {
     <div class="sum-bar" style="border-top:1px solid var(--border);">
       <div class="sum-row">
         <div class="sum-left">
-          <span class="sum-total blurred" id="sumTotal" onclick="toggleSalaryBlur(this)">3,481,200원</span>
+          <span class="sum-total" id="sumTotal">3,481,200원</span>
           <span class="sum-sub" id="sumSub">20.0공수 · 3.3%</span>
         </div>
       </div>
@@ -2374,7 +2374,7 @@ body {
         <span class="set-title">합계 금액 표시</span>
         <span class="set-desc">하단 총 수령액 표시</span>
       </div>
-      <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      <label class="toggle-wrap"><input type="checkbox" id="salaryToggle" checked onchange="st_toggleSalary(this.checked)"><span class="toggle-slider"></span></label>
     </div>
     <div class="set-row">
       <div class="set-left">
@@ -4506,17 +4506,22 @@ function st_toggleDanga(on){
   localStorage.setItem('showDanga', on?'1':'0');
   if(typeof renderCalendar==='function') renderCalendar();
 }
-// 급여 금액 블러 토글 (탭하면 보임/가림)
-function toggleSalaryBlur(el){
-  el.classList.toggle('blurred');
-  try{ localStorage.setItem('salaryBlur', el.classList.contains('blurred')?'1':'0'); }catch(e){}
+// 급여 합계 표시/가림 (설정 토글로 제어)
+function st_toggleSalary(on){
+  var el=document.getElementById('sumTotal');
+  if(el){ if(on) el.classList.remove('blurred'); else el.classList.add('blurred'); }
+  try{ localStorage.setItem('salaryShow', on?'1':'0'); }catch(e){}
 }
-window.toggleSalaryBlur = toggleSalaryBlur;
-// 시작 시 급여 블러 상태 복원 (기본: 가림)
+window.st_toggleSalary = st_toggleSalary;
+// 시작 시 급여 표시 상태 복원 (기본: 표시)
 (function(){
   try{
+    var show = localStorage.getItem('salaryShow');
+    var on = (show===null) ? true : (show==='1');
     var el=document.getElementById('sumTotal');
-    if(el && localStorage.getItem('salaryBlur')==='0') el.classList.remove('blurred');
+    if(el){ if(on) el.classList.remove('blurred'); else el.classList.add('blurred'); }
+    var tog=document.getElementById('salaryToggle');
+    if(tog) tog.checked=on;
   }catch(e){}
 })();
 function st_openLogin(){ document.getElementById('loginOverlay').classList.add('on'); }
