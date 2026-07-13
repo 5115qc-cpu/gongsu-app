@@ -4619,13 +4619,9 @@ function st_loginKakao(){ alert('카카오 로그인 — 추후 지원 예정입
 function st_loginGoogle(){
   if (typeof firebase === 'undefined' || !firebase.auth){ alert('네트워크 연결을 확인해주세요 (Firebase 로드 실패)'); return; }
   var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
-    .then(function(result){ st_closeLogin(); })
-    .catch(function(err){
-      var code = (err && err.code) ? err.code : err;
-      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
-      alert('구글 로그인 실패: ' + code);
-    });
+  firebase.auth().signInWithRedirect(provider).catch(function(err){
+    alert('구글 로그인 시작 실패: ' + ((err && err.code) ? err.code : err));
+  });
 }
 function st_logout(){
   if (typeof firebase === 'undefined' || !firebase.auth) return;
@@ -4655,6 +4651,9 @@ function st_applyAuthUI(user){
 try {
   if (typeof firebase !== 'undefined' && firebase.auth){
     firebase.auth().onAuthStateChanged(function(user){ st_applyAuthUI(user); });
+    firebase.auth().getRedirectResult()
+      .then(function(result){ if (result && result.user){ st_closeLogin(); } })
+      .catch(function(err){ alert('구글 로그인 실패: ' + ((err && err.code) ? err.code : err)); });
   }
 } catch(e){ console.log('auth listener', e); }
 </script>
