@@ -1336,6 +1336,20 @@ body.ivory #tab-team .bulk-val { color: var(--txt1); }
 #pjOverlay .con-ta { width:100%; flex:1; background:var(--card); border:none; border-top:0.5px solid var(--border); outline:none; color:var(--txt2); font-size:var(--pj-body); padding:8px; resize:none; line-height:1.5; font-family:'Noto Sans KR',sans-serif; display:block; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- ===== Firebase SDK (CDN compat) ===== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-auth-compat.js"></script>
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyBZtbgmkT-hpn0XxpjRZ10F5QFTgOH9MZ8",
+    authDomain: "gongsu.firebaseapp.com",
+    projectId: "gongsu",
+    storageBucket: "gongsu.firebasestorage.app",
+    messagingSenderId: "735252446193",
+    appId: "1:735252446193:web:00846e508b6fdaf70b2250"
+  };
+  try { firebase.initializeApp(firebaseConfig); } catch(e){ console.log('firebase init', e); }
+</script>
 </head>
 <body>
   <div class="phone">
@@ -2528,7 +2542,7 @@ body.ivory #tab-team .bulk-val { color: var(--txt1); }
       <div class="set-left"><span class="set-title">데이터 백업/복구</span></div>
       <span class="set-arrow">›</span>
     </div>
-    <div class="set-row">
+    <div class="set-row" onclick="st_logout()" style="cursor:pointer;">
       <div class="set-left"><span class="set-title logout">로그아웃</span></div>
       <span class="set-arrow logout">›</span>
     </div>
@@ -4601,8 +4615,48 @@ window.st_toggleSalary = st_toggleSalary;
 })();
 function st_openLogin(){ document.getElementById('loginOverlay').classList.add('on'); }
 function st_closeLogin(){ document.getElementById('loginOverlay').classList.remove('on'); }
-function st_loginKakao(){ alert('카카오 로그인 — Firebase 연동 후 활성화됩니다'); }
-function st_loginGoogle(){ alert('구글 로그인 — Firebase 연동 후 활성화됩니다'); }
+function st_loginKakao(){ alert('카카오 로그인 — 추후 지원 예정입니다'); }
+function st_loginGoogle(){
+  if (typeof firebase === 'undefined' || !firebase.auth){ alert('네트워크 연결을 확인해주세요 (Firebase 로드 실패)'); return; }
+  var provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then(function(result){ st_closeLogin(); })
+    .catch(function(err){
+      var code = (err && err.code) ? err.code : err;
+      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+      alert('구글 로그인 실패: ' + code);
+    });
+}
+function st_logout(){
+  if (typeof firebase === 'undefined' || !firebase.auth) return;
+  firebase.auth().signOut();
+}
+/* ===== 로그인 상태에 따라 프로필 카드 갱신 ===== */
+var _origProfile = null;
+function st_applyAuthUI(user){
+  var nameEl = document.getElementById('userName');
+  var descEl = document.getElementById('userDesc');
+  var avEl = document.querySelector('.set-profile-avatar');
+  if (!nameEl || !descEl) return;
+  if (_origProfile === null){
+    _origProfile = { name: nameEl.textContent, desc: descEl.textContent, av: avEl ? avEl.textContent : '' };
+  }
+  if (user){
+    var dn = user.displayName || (user.email ? user.email.split('@')[0] : '사용자');
+    nameEl.textContent = dn;
+    descEl.textContent = user.email || '구글 로그인됨';
+    if (avEl) avEl.textContent = dn.charAt(0);
+  } else {
+    nameEl.textContent = _origProfile.name;
+    descEl.textContent = _origProfile.desc;
+    if (avEl) avEl.textContent = _origProfile.av;
+  }
+}
+try {
+  if (typeof firebase !== 'undefined' && firebase.auth){
+    firebase.auth().onAuthStateChanged(function(user){ st_applyAuthUI(user); });
+  }
+} catch(e){ console.log('auth listener', e); }
 </script>
 <script>
 /* ===== 라우터 (탭 index 순서 = 패널 순서) ===== */
