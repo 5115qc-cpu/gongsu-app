@@ -2408,7 +2408,7 @@ body.ivory #tab-team .bulk-val { color: var(--txt1); }
   <div class="scroll">
 
     <!-- 프로필 카드 -->
-    <div class="set-profile-card" onclick="st_openLogin()" style="cursor:pointer;">
+    <div class="set-profile-card" onclick="st_profileTap()" style="cursor:pointer;">
       <div class="set-profile-avatar">김</div>
       <div class="set-profile-info">
         <span class="set-profile-name" id="userName">김진석</span>
@@ -4614,6 +4614,10 @@ window.st_toggleSalary = st_toggleSalary;
   }catch(e){}
 })();
 function st_openLogin(){ document.getElementById('loginOverlay').classList.add('on'); }
+function st_profileTap(){
+  var u = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
+  if (u){ st_openAcctInfoPopup(); } else { st_openLogin(); }
+}
 function st_closeLogin(){ document.getElementById('loginOverlay').classList.remove('on'); }
 function st_loginKakao(){ alert('카카오 로그인 — 추후 지원 예정입니다'); }
 function st_loginGoogle(){
